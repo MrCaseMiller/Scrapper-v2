@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brutalist Graph</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>BRUTALIST GRAPH SYSTEM</h1>
+    <p>CODESANDBOX DEMO</p>
+  </div>
+
+  <div class="toolbar">
+    <div>
+      <label>DATASET: </label>
+      <select id="datasetSelect">
+        <option value="ablation">ABLATION STUDY</option>
+        <option value="performance">PERFORMANCE</option>
+      </select>
+    </div>
+    <div>
+      <label>STYLE: </label>
+      <select id="styleSelect">
+        <option value="bar">BAR</option>
+        <option value="line">LINE</option>
+        <option value="radar">RADAR</option>
+        <option value="stacked">STACKED</option>
+      </select>
+    </div>
+    <div>
+      <button id="themeToggle">DARK</button>
+      <button id="exportSvg">EXPORT SVG</button>
+    </div>
+  </div>
+
+  <div class="graph-container">
+    <div class="graph-header">
+      <span id="graphTitle">ABLATION STUDY RESULTS</span>
+      <span>INTERACTIVE</span>
+    </div>
+    <div class="graph-body" id="graphBody"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="tooltip" id="tooltip">
+    <div class="tooltip-header" id="tooltipHeader"></div>
+    <div class="tooltip-body" id="tooltipBody"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="renderers.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

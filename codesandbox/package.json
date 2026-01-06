@@ -1,0 +1,11 @@
+{
+  "name": "brutalist-graph-sandbox",
+  "version": "1.0.0",
+  "description": "Interactive graph visualization with minimalist grayscale UI",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["graph", "visualization", "svg", "brutalist"],
+  "license": "MIT"
+}

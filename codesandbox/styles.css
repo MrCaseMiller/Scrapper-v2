@@ -1,0 +1,128 @@
+:root {
+  --bg: #f5f5f5;
+  --fg: #1a1a1a;
+  --grid: #e8e8e8;
+  --muted: #888;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --fg: #f5f5f5;
+  --grid: #2a2a2a;
+  --muted: #666;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Courier New', monospace;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--fg);
+  color: var(--bg);
+  padding: 20px;
+  text-align: center;
+}
+
+.header h1 { font-size: 18px; letter-spacing: 4px; font-weight: 400; }
+.header p { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--bg);
+  flex-wrap: wrap;
+}
+
+.toolbar label {
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.toolbar select, .toolbar button {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: none;
+  background: var(--grid);
+  color: var(--fg);
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.toolbar button:hover { background: var(--fg); color: var(--bg); }
+
+.graph-container {
+  margin: 20px;
+  background: var(--bg);
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+.graph-body { padding: 20px; background: var(--bg); }
+.graph-body svg { display: block; max-width: 100%; height: auto; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 16px;
+  font-size: 11px;
+}
+
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-swatch { width: 12px; height: 12px; }
+
+.tooltip {
+  position: fixed;
+  background: var(--bg);
+  min-width: 180px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.tooltip.visible { opacity: 1; }
+
+.tooltip-header {
+  padding: 8px 12px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.tooltip-body { padding: 10px; }
+
+.tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 0;
+  font-size: 11px;
+}
+
+.tooltip-row span:first-child { display: flex; align-items: center; gap: 6px; }
+.tooltip-swatch { width: 10px; height: 10px; }
+
+.bar { cursor: pointer; transition: opacity 0.15s; }
+.bar:hover { opacity: 0.7; }
