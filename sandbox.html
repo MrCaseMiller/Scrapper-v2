@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BRUTALIST GRAPH - SANDBOX</title>
+  <title>Ablation Studies - Graph Dashboard</title>
   <style>
     :root {
       --bg: #f5f5f5;
@@ -13,59 +13,29 @@
       --radius: 4px;
       --radius-sm: 2px;
     }
-    [data-theme="dark"] {
-      --bg: #1a1a1a;
-      --fg: rgba(200, 200, 200, 1);
-      --grid: #2a2a2a;
-      --muted: rgba(200, 200, 200, 0.6);
-    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Courier New', monospace;
       background: var(--bg);
       color: var(--fg);
       min-height: 100vh;
-    }
-    .header {
-      background: var(--fg);
-      color: var(--bg);
       padding: 20px;
+    }
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .page-header {
       text-align: center;
-      border-radius: var(--radius) var(--radius) 0 0;
+      margin-bottom: 30px;
     }
-    .header h1 { font-size: 18px; letter-spacing: 4px; font-weight: 400; }
-    .header p { font-size: 11px; color: var(--muted); margin-top: 8px; }
-    .toolbar {
-      display: flex;
-      gap: 12px;
-      padding: 12px 20px;
-      background: var(--bg);
-      flex-wrap: wrap;
-    }
-    .toolbar label { font-size: 11px; font-weight: bold; letter-spacing: 1px; color: var(--muted); }
-    .toolbar select, .toolbar button {
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 8px 16px;
-      border: none;
-      background: var(--grid);
-      color: var(--fg);
-      cursor: pointer;
-      text-transform: uppercase;
-      border-radius: var(--radius);
-      transition: all 0.2s ease;
-    }
-    .toolbar button:hover {
-      background: var(--fg);
-      color: var(--bg);
-      transform: translateY(-1px);
-    }
-    .toolbar select:hover {
-      background: rgba(65, 62, 62, 0.1);
+    .page-header h1 { font-size: 16px; letter-spacing: 3px; font-weight: 400; margin-bottom: 6px; }
+    .page-header p { font-size: 11px; color: var(--muted); }
+
+    .graph-section {
+      margin-bottom: 40px;
     }
     .graph-container {
-      margin: 20px;
       background: var(--bg);
       border-radius: var(--radius);
       overflow: hidden;
@@ -73,30 +43,35 @@
     .graph-header {
       display: flex;
       justify-content: space-between;
-      padding: 10px 16px;
+      align-items: center;
+      padding: 12px 16px;
       background: var(--fg);
       color: var(--bg);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 400;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
     }
+    .graph-header .title { font-weight: 600; }
+    .graph-header .subtitle { font-size: 10px; opacity: 0.7; }
     .graph-body { padding: 20px; background: var(--bg); }
     .graph-body svg { display: block; max-width: 100%; height: auto; }
     .legend {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
       padding: 12px 16px;
       font-size: 11px;
+      justify-content: center;
     }
     .legend-item { display: flex; align-items: center; gap: 8px; }
     .legend-swatch { width: 12px; height: 12px; border-radius: var(--radius-sm); }
+
     .tooltip {
       position: fixed;
-      background: rgba(245, 242, 235, 0.75);
+      background: rgba(245, 242, 235, 0.85);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      min-width: 180px;
+      min-width: 200px;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
@@ -105,23 +80,15 @@
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    [data-theme="dark"] .tooltip {
-      background: rgba(40, 40, 40, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
     .tooltip.visible { opacity: 1; }
     .tooltip-header {
       padding: 10px 14px;
       background: transparent;
       color: rgba(65, 62, 62, 0.9);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(65, 62, 62, 0.1);
-    }
-    [data-theme="dark"] .tooltip-header {
-      color: rgba(255, 255, 255, 0.9);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     .tooltip-body { padding: 12px 14px; }
     .tooltip-row {
@@ -131,52 +98,88 @@
       font-size: 11px;
       color: rgba(65, 62, 62, 0.8);
     }
-    [data-theme="dark"] .tooltip-row {
-      color: rgba(255, 255, 255, 0.8);
-    }
     .tooltip-row span:first-child { display: flex; align-items: center; gap: 8px; }
     .tooltip-swatch { width: 10px; height: 10px; border-radius: var(--radius-sm); }
-    .bar {
-      cursor: pointer;
+    .bar { cursor: pointer; }
+
+    .placeholder {
+      background: var(--grid);
+      border-radius: var(--radius);
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
     }
+    .placeholder-title { font-weight: 600; margin-bottom: 8px; }
+
+    .export-btn {
+      font-family: inherit;
+      font-size: 10px;
+      padding: 6px 12px;
+      border: none;
+      background: rgba(255,255,255,0.2);
+      color: var(--bg);
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+    }
+    .export-btn:hover { background: rgba(255,255,255,0.3); }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>BRUTALIST GRAPH SYSTEM</h1>
-    <p>SANDBOX TEST / STANDALONE HTML / NO BUILD REQUIRED</p>
-  </div>
+  <div class="dashboard">
+    <div class="page-header">
+      <h1>ABLATION STUDIES DASHBOARD</h1>
+      <p>Standard vs Ablation Studies (Bernoulli ±1 SE)</p>
+    </div>
 
-  <div class="toolbar">
-    <div>
-      <label>DATASET: </label>
-      <select id="datasetSelect">
-        <option value="ablation">ABLATION STUDY</option>
-        <option value="performance">PERFORMANCE</option>
-      </select>
+    <!-- Graph 1: Main Ablation Study -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Standard vs Ablation Studies</span>
+            <span class="subtitle"> — Bernoulli ±1 SE</span>
+          </div>
+          <button class="export-btn" onclick="exportSvg('graph1')">EXPORT SVG</button>
+        </div>
+        <div class="graph-body" id="graph1"></div>
+        <div class="legend" id="legend1"></div>
+      </div>
     </div>
-    <div>
-      <label>STYLE: </label>
-      <select id="styleSelect">
-        <option value="bar">BAR</option>
-        <option value="line">LINE</option>
-        <option value="radar">RADAR</option>
-        <option value="stacked">STACKED</option>
-      </select>
-    </div>
-    <div>
-      <button id="themeToggle">DARK</button>
-      <button id="exportSvg">EXPORT SVG</button>
-    </div>
-  </div>
 
-  <div class="graph-container">
-    <div class="graph-header">
-      <span id="graphTitle">ABLATION STUDY RESULTS</span>
-      <span>INTERACTIVE</span>
+    <!-- Graph 2: Placeholder -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Graph 2</span>
+            <span class="subtitle"> — Awaiting Data</span>
+          </div>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-title">GRAPH PLACEHOLDER</div>
+          <div>Add data to render this graph</div>
+        </div>
+      </div>
     </div>
-    <div class="graph-body" id="graphBody"></div>
-    <div class="legend" id="legend"></div>
+
+    <!-- Graph 3: Placeholder -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Graph 3</span>
+            <span class="subtitle"> — Awaiting Data</span>
+          </div>
+        </div>
+        <div class="placeholder">
+          <div class="placeholder-title">GRAPH PLACEHOLDER</div>
+          <div>Add data to render this graph</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="tooltip" id="tooltip">
@@ -185,257 +188,166 @@
   </div>
 
   <script>
-    const DATASETS = {
-      ablation: {
-        title: 'ABLATION STUDY RESULTS',
-        clusters: [
-          { id: 'in_dist_follow', name: 'IN-DIST FOLLOW', points: [
-            { label: 'π₀.₅', value: 85 }, { label: 'no WD', value: 84 },
-            { label: 'no CE', value: 72 }, { label: 'no ME', value: 64 },
-            { label: 'no ME/CE', value: 55 }
-          ]},
-          { id: 'in_dist_success', name: 'IN-DIST SUCCESS', points: [
-            { label: 'π₀.₅', value: 80 }, { label: 'no WD', value: 79 },
-            { label: 'no CE', value: 65 }, { label: 'no ME', value: 55 },
-            { label: 'no ME/CE', value: 48 }
-          ]},
-          { id: 'ood_follow', name: 'OOD FOLLOW', points: [
-            { label: 'π₀.₅', value: 94 }, { label: 'no WD', value: 80 },
-            { label: 'no CE', value: 67 }, { label: 'no ME', value: 33 },
-            { label: 'no ME/CE', value: 30 }
-          ]},
-          { id: 'ood_success', name: 'OOD SUCCESS', points: [
-            { label: 'π₀.₅', value: 88 }, { label: 'no WD', value: 70 },
-            { label: 'no CE', value: 48 }, { label: 'no ME', value: 32 },
-            { label: 'no ME/CE', value: 28 }
-          ]}
-        ]
-      },
-      performance: {
-        title: 'MODEL PERFORMANCE METRICS',
-        clusters: [
-          { id: 'accuracy', name: 'ACCURACY', points: [
-            { label: 'Model A', value: 92 }, { label: 'Model B', value: 88 },
-            { label: 'Model C', value: 85 }, { label: 'Model D', value: 79 },
-            { label: 'Model E', value: 73 }, { label: 'Model F', value: 68 }
-          ]},
-          { id: 'latency', name: 'LATENCY (INV)', points: [
-            { label: 'Model A', value: 45 }, { label: 'Model B', value: 78 },
-            { label: 'Model C', value: 92 }, { label: 'Model D', value: 85 },
-            { label: 'Model E', value: 88 }, { label: 'Model F', value: 95 }
-          ]},
-          { id: 'memory', name: 'MEMORY EFF', points: [
-            { label: 'Model A', value: 60 }, { label: 'Model B', value: 72 },
-            { label: 'Model C', value: 88 }, { label: 'Model D', value: 91 },
-            { label: 'Model E', value: 85 }, { label: 'Model F', value: 78 }
-          ]}
-        ]
-      }
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: Standard vs Ablation Studies
+    // ═══════════════════════════════════════════════════════════════════════
+    const ABLATION_DATA = {
+      title: 'Standard vs Ablation Studies',
+      yAxisLabel: 'Success Rate',
+      clusters: [
+        { id: 'scrub_dish', name: 'EVAL: Scrub dish with sponge', points: [
+          { label: 'Standard', value: 21 },
+          { label: 'no_ego', value: 0 },
+          { label: '10pct', value: 0 },
+          { label: 'no_cap_upsample', value: 0 }
+        ]},
+        { id: 'closing_door', name: 'EVAL: Closing the sliding door', points: [
+          { label: 'Standard', value: 52 },
+          { label: 'no_ego', value: 34 },
+          { label: '10pct', value: 21 },
+          { label: 'no_cap_upsample', value: 21 }
+        ]},
+        { id: 'watering_can', name: 'EVAL: watering can', points: [
+          { label: 'Standard', value: 52 },
+          { label: 'no_ego', value: 34 },
+          { label: '10pct', value: 28 },
+          { label: 'no_cap_upsample', value: 25 }
+        ]},
+        { id: 'steam_shirt', name: 'EVAL: Steam the shirt', points: [
+          { label: 'Standard', value: 95 },
+          { label: 'no_ego', value: 26 },
+          { label: '10pct', value: 73 },
+          { label: 'no_cap_upsample', value: 33 }
+        ]},
+        { id: 'iron_shirt', name: 'EVAL: Iron shirt', points: [
+          { label: 'Standard', value: 0 },
+          { label: 'no_ego', value: 0 },
+          { label: '10pct', value: 11 },
+          { label: 'no_cap_upsample', value: 0 }
+        ]},
+        { id: 'pick_up_pot', name: 'EVAL: Pick up pot', points: [
+          { label: 'Standard', value: 52 },
+          { label: 'no_ego', value: 48 },
+          { label: '10pct', value: 35 },
+          { label: 'no_cap_upsample', value: 25 }
+        ]},
+        { id: 'pick_up_box', name: 'EVAL: Pick up box with both hands', points: [
+          { label: 'Standard', value: 21 },
+          { label: 'no_ego', value: 35 },
+          { label: '10pct', value: 28 },
+          { label: 'no_cap_upsample', value: 21 }
+        ]},
+        { id: 'pull_tissue', name: 'EVAL: Pull tissue', points: [
+          { label: 'Standard', value: 52 },
+          { label: 'no_ego', value: 35 },
+          { label: '10pct', value: 21 },
+          { label: 'no_cap_upsample', value: 21 }
+        ]},
+        { id: 'grab_chips', name: 'EVAL: Grab bag of chips', points: [
+          { label: 'Standard', value: 85 },
+          { label: 'no_ego', value: 70 },
+          { label: '10pct', value: 98 },
+          { label: 'no_cap_upsample', value: 70 }
+        ]}
+      ]
     };
 
     // Monochrome palette based on rgba(65, 62, 62)
     const COLORS = [
       'rgba(65, 62, 62, 1)',
-      'rgba(65, 62, 62, 0.8)',
-      'rgba(65, 62, 62, 0.6)',
+      'rgba(65, 62, 62, 0.7)',
       'rgba(65, 62, 62, 0.45)',
-      'rgba(65, 62, 62, 0.3)',
-      'rgba(65, 62, 62, 0.18)'
+      'rgba(65, 62, 62, 0.25)'
     ];
-    const CONFIG = { width: 1000, height: 400, padding: { top: 40, right: 40, bottom: 70, left: 60 } };
 
-    let currentDataset = 'ablation';
-    let currentStyle = 'bar';
-    let isDark = false;
+    const CONFIG = {
+      width: 1200,
+      height: 420,
+      padding: { top: 40, right: 40, bottom: 100, left: 70 }
+    };
 
-    function renderBarChart(clusters) {
+    // ═══════════════════════════════════════════════════════════════════════
+    // BAR CHART RENDERER
+    // ═══════════════════════════════════════════════════════════════════════
+    function renderBarChart(data, containerId) {
       const { width, height, padding } = CONFIG;
+      const clusters = data.clusters;
       const chartW = width - padding.left - padding.right;
       const chartH = height - padding.top - padding.bottom;
-      const maxVal = Math.ceil(Math.max(...clusters.flatMap(c => c.points.map(p => p.value))) / 10) * 10;
+      const maxVal = 100; // Success rate 0-100%
       const clusterW = chartW / clusters.length;
       const maxBars = Math.max(...clusters.map(c => c.points.length));
-      const barW = Math.max(10, (clusterW - 20) / maxBars - 4);
+      const barW = Math.max(8, (clusterW - 24) / maxBars - 3);
 
       let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
-      svg += `<rect width="100%" height="100%" fill="${isDark ? '#1a1a1a' : '#f5f5f5'}" rx="4"/>`;
+      svg += `<rect width="100%" height="100%" fill="#f5f5f5" rx="4"/>`;
 
+      // Y-axis label
+      svg += `<text x="20" y="${height/2}" text-anchor="middle" fill="rgba(65,62,62,0.6)" font-family="monospace" font-size="10" transform="rotate(-90, 20, ${height/2})">${data.yAxisLabel}</text>`;
+
+      // Grid lines and Y-axis labels
       for (let i = 0; i <= 10; i++) {
         const y = padding.top + (i / 10) * chartH;
-        const val = maxVal - (i / 10) * maxVal;
-        svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="${isDark ? '#333' : '#e0e0e0'}" stroke-width="0.5"/>`;
-        svg += `<text x="${padding.left - 10}" y="${y + 4}" text-anchor="end" fill="${isDark ? '#666' : 'rgba(65,62,62,0.5)'}" font-family="monospace" font-size="9">${val}%</text>`;
+        const val = (100 - (i / 10) * 100) / 100;
+        svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+        svg += `<text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" fill="rgba(65,62,62,0.5)" font-family="monospace" font-size="9">${val.toFixed(1)}</text>`;
       }
 
+      // Bars
       clusters.forEach((cluster, ci) => {
         const cx = padding.left + (ci + 0.5) * clusterW;
-        const startX = cx - (cluster.points.length * (barW + 2)) / 2;
+        const startX = cx - (cluster.points.length * (barW + 3)) / 2;
 
         cluster.points.forEach((pt, pi) => {
           const barH = (pt.value / maxVal) * chartH;
-          const x = startX + pi * (barW + 2);
+          const x = startX + pi * (barW + 3);
           const y = height - padding.bottom - barH;
-          svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}" rx="3" ry="3"/>`;
+          svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}" rx="2" ry="2"/>`;
         });
 
-        svg += `<text x="${cx}" y="${height - padding.bottom + 35}" text-anchor="middle" fill="${isDark ? '#888' : 'rgba(65,62,62,0.7)'}" font-family="monospace" font-size="9">${cluster.name}</text>`;
+        // X-axis labels (rotated)
+        const labelX = cx;
+        const labelY = height - padding.bottom + 12;
+        svg += `<text x="${labelX}" y="${labelY}" text-anchor="start" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8" transform="rotate(45, ${labelX}, ${labelY})">${cluster.name}</text>`;
       });
 
-      svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}" stroke="${isDark ? '#444' : 'rgba(65,62,62,0.2)'}" stroke-width="0.5"/>`;
-      svg += `<line x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}" stroke="${isDark ? '#444' : 'rgba(65,62,62,0.2)'}" stroke-width="0.5"/>`;
-      svg += '</svg>';
-      return svg;
-    }
-
-    function renderLineChart(clusters) {
-      const { width, height, padding } = CONFIG;
-      const chartW = width - padding.left - padding.right;
-      const chartH = height - padding.top - padding.bottom;
-      const maxVal = Math.ceil(Math.max(...clusters.flatMap(c => c.points.map(p => p.value))) / 10) * 10;
-      const pointSpacing = chartW / (clusters.length - 1 || 1);
-      const numSeries = clusters[0]?.points.length || 0;
-
-      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
-      svg += `<rect width="100%" height="100%" fill="${isDark ? '#1a1a1a' : '#f5f5f5'}" rx="4"/>`;
-
-      for (let i = 0; i <= 10; i++) {
-        const y = padding.top + (i / 10) * chartH;
-        svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="${isDark ? '#333' : '#e0e0e0'}" stroke-width="0.5"/>`;
-      }
-
-      for (let si = 0; si < numSeries; si++) {
-        let path = '';
-        clusters.forEach((c, ci) => {
-          const x = padding.left + ci * pointSpacing;
-          const y = height - padding.bottom - (c.points[si].value / maxVal) * chartH;
-          path += ci === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-        });
-        svg += `<path d="${path}" fill="none" stroke="${COLORS[si % COLORS.length]}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
-
-        clusters.forEach((c, ci) => {
-          const x = padding.left + ci * pointSpacing;
-          const y = height - padding.bottom - (c.points[si].value / maxVal) * chartH;
-          svg += `<circle class="bar" data-cluster="${c.id}" data-idx="${si}" cx="${x}" cy="${y}" r="4" fill="${COLORS[si % COLORS.length]}"/>`;
-        });
-      }
-
-      clusters.forEach((c, i) => {
-        const x = padding.left + i * pointSpacing;
-        svg += `<text x="${x}" y="${height - padding.bottom + 25}" text-anchor="middle" fill="${isDark ? '#888' : 'rgba(65,62,62,0.7)'}" font-family="monospace" font-size="9">${c.name}</text>`;
-      });
+      // Axes
+      svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
+      svg += `<line x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
 
       svg += '</svg>';
-      return svg;
-    }
 
-    function renderRadarChart(clusters) {
-      const { width, height } = CONFIG;
-      const cx = width / 2, cy = height / 2;
-      const radius = Math.min(width, height) / 2 - 80;
-      const numAxes = clusters.length;
-      const angleStep = (2 * Math.PI) / numAxes;
-      const numSeries = clusters[0]?.points.length || 0;
+      document.getElementById(containerId).innerHTML = svg;
 
-      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
-      svg += `<rect width="100%" height="100%" fill="${isDark ? '#1a1a1a' : '#f5f5f5'}" rx="4"/>`;
-
-      for (let i = 1; i <= 5; i++) {
-        const r = (radius / 5) * i;
-        svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${isDark ? '#333' : '#e0e0e0'}" stroke-width="0.5"/>`;
-      }
-
-      for (let i = 0; i < numAxes; i++) {
-        const angle = i * angleStep - Math.PI / 2;
-        const x = cx + radius * Math.cos(angle);
-        const y = cy + radius * Math.sin(angle);
-        svg += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="${isDark ? '#333' : '#e0e0e0'}" stroke-width="0.5"/>`;
-      }
-
-      for (let si = 0; si < numSeries; si++) {
-        let path = '';
-        clusters.forEach((c, ci) => {
-          const val = c.points[si].value;
-          const angle = ci * angleStep - Math.PI / 2;
-          const r = (val / 100) * radius;
-          const x = cx + r * Math.cos(angle);
-          const y = cy + r * Math.sin(angle);
-          path += ci === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-        });
-        path += ' Z';
-        svg += `<path d="${path}" fill="${COLORS[si % COLORS.length]}" fill-opacity="0.12" stroke="${COLORS[si % COLORS.length]}" stroke-width="1" stroke-linejoin="round"/>`;
-      }
-
-      clusters.forEach((c, i) => {
-        const angle = i * angleStep - Math.PI / 2;
-        const x = cx + (radius + 30) * Math.cos(angle);
-        const y = cy + (radius + 30) * Math.sin(angle);
-        svg += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" fill="${isDark ? '#888' : 'rgba(65,62,62,0.7)'}" font-family="monospace" font-size="9">${c.name}</text>`;
-      });
-
-      svg += '</svg>';
-      return svg;
-    }
-
-    function renderStackedChart(clusters) {
-      const { width, height, padding } = CONFIG;
-      const chartW = width - padding.left - padding.right;
-      const chartH = height - padding.top - padding.bottom;
-      const maxStacked = Math.max(...clusters.map(c => c.points.reduce((s, p) => s + p.value, 0)));
-      const barW = (chartW / clusters.length) * 0.7;
-      const barSpacing = (chartW / clusters.length) * 0.3;
-
-      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
-      svg += `<rect width="100%" height="100%" fill="${isDark ? '#1a1a1a' : '#f5f5f5'}" rx="4"/>`;
-
-      for (let i = 0; i <= 5; i++) {
-        const y = padding.top + (i / 5) * chartH;
-        svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="${isDark ? '#333' : '#e0e0e0'}" stroke-width="0.5"/>`;
-      }
-
-      clusters.forEach((c, ci) => {
-        const x = padding.left + ci * (barW + barSpacing) + barSpacing / 2;
-        let curY = height - padding.bottom;
-
-        c.points.forEach((pt, pi) => {
-          const segH = (pt.value / maxStacked) * chartH;
-          const y = curY - segH;
-          svg += `<rect class="bar" data-cluster="${c.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${segH}" fill="${COLORS[pi % COLORS.length]}" rx="2" ry="2"/>`;
-          curY = y;
-        });
-
-        svg += `<text x="${x + barW / 2}" y="${height - padding.bottom + 25}" text-anchor="middle" fill="${isDark ? '#888' : 'rgba(65,62,62,0.7)'}" font-family="monospace" font-size="9">${c.name}</text>`;
-      });
-
-      svg += '</svg>';
-      return svg;
-    }
-
-    function render() {
-      const data = DATASETS[currentDataset];
-      document.getElementById('graphTitle').textContent = data.title;
-
-      const renderers = { bar: renderBarChart, line: renderLineChart, radar: renderRadarChart, stacked: renderStackedChart };
-      document.getElementById('graphBody').innerHTML = renderers[currentStyle](data.clusters);
-
-      document.getElementById('legend').innerHTML = data.clusters[0].points.map((pt, i) =>
-        `<div class="legend-item"><div class="legend-swatch" style="background:${COLORS[i % COLORS.length]}"></div><span>${pt.label}</span></div>`
-      ).join('');
-
-      document.querySelectorAll('.bar').forEach(bar => {
-        bar.addEventListener('mouseenter', showTooltip);
+      // Attach event listeners
+      document.querySelectorAll(`#${containerId} .bar`).forEach(bar => {
+        bar.addEventListener('mouseenter', (e) => showTooltip(e, data));
         bar.addEventListener('mousemove', moveTooltip);
         bar.addEventListener('mouseleave', hideTooltip);
       });
     }
 
-    function showTooltip(e) {
+    // ═══════════════════════════════════════════════════════════════════════
+    // LEGEND
+    // ═══════════════════════════════════════════════════════════════════════
+    function renderLegend(data, containerId) {
+      const legendEl = document.getElementById(containerId);
+      legendEl.innerHTML = data.clusters[0].points.map((pt, i) =>
+        `<div class="legend-item"><div class="legend-swatch" style="background:${COLORS[i % COLORS.length]}"></div><span>${pt.label}</span></div>`
+      ).join('');
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // TOOLTIP
+    // ═══════════════════════════════════════════════════════════════════════
+    function showTooltip(e, data) {
       const clusterId = e.target.getAttribute('data-cluster');
-      const cluster = DATASETS[currentDataset].clusters.find(c => c.id === clusterId);
+      const cluster = data.clusters.find(c => c.id === clusterId);
       if (!cluster) return;
 
       document.getElementById('tooltipHeader').textContent = cluster.name;
       document.getElementById('tooltipBody').innerHTML = cluster.points.map((pt, i) =>
-        `<div class="tooltip-row"><span><div class="tooltip-swatch" style="background:${COLORS[i % COLORS.length]}"></div>${pt.label}</span><strong>${pt.value}%</strong></div>`
+        `<div class="tooltip-row"><span><div class="tooltip-swatch" style="background:${COLORS[i % COLORS.length]}"></div>${pt.label}</span><strong>${(pt.value / 100).toFixed(2)}</strong></div>`
       ).join('');
 
       document.getElementById('tooltip').classList.add('visible');
@@ -451,34 +363,24 @@
       document.getElementById('tooltip').classList.remove('visible');
     }
 
-    document.getElementById('datasetSelect').addEventListener('change', e => {
-      currentDataset = e.target.value;
-      render();
-    });
-
-    document.getElementById('styleSelect').addEventListener('change', e => {
-      currentStyle = e.target.value;
-      render();
-    });
-
-    document.getElementById('themeToggle').addEventListener('click', () => {
-      isDark = !isDark;
-      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-      document.getElementById('themeToggle').textContent = isDark ? 'LIGHT' : 'DARK';
-      render();
-    });
-
-    document.getElementById('exportSvg').addEventListener('click', () => {
-      const svg = document.querySelector('#graphBody svg');
+    // ═══════════════════════════════════════════════════════════════════════
+    // EXPORT
+    // ═══════════════════════════════════════════════════════════════════════
+    function exportSvg(containerId) {
+      const svg = document.querySelector(`#${containerId} svg`);
       if (!svg) return;
       const blob = new Blob([svg.outerHTML], { type: 'image/svg+xml' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `${currentDataset}-${currentStyle}.svg`;
+      a.download = `${containerId}-chart.svg`;
       a.click();
-    });
+    }
 
-    render();
+    // ═══════════════════════════════════════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════════════════════════════════════
+    renderBarChart(ABLATION_DATA, 'graph1');
+    renderLegend(ABLATION_DATA, 'legend1');
   </script>
 </body>
 </html>
