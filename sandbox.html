@@ -406,8 +406,8 @@
       const maxVal = Math.ceil(maxAbs / 10) * 10; // Round up to nearest 10
 
       const clusterW = chartW / clusters.length;
-      const maxBars = Math.max(...clusters.map(c => c.points.length));
-      const barW = Math.max(6, (clusterW - 16) / maxBars - 2);
+      // Use 4 bars to match Graph 1 bar width
+      const barW = Math.max(6, (clusterW - 16) / 4 - 2);
 
       // Zero line position (middle of chart)
       const zeroY = padding.top + chartH / 2;
