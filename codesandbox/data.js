@@ -47,5 +47,13 @@ const DATASETS = {
   }
 };
 
-const COLORS = ['#1a1a1a', '#404040', '#666666', '#8c8c8c', '#b3b3b3', '#d9d9d9'];
+// Monochrome palette based on rgba(65, 62, 62)
+const COLORS = [
+  'rgba(65, 62, 62, 1)',
+  'rgba(65, 62, 62, 0.8)',
+  'rgba(65, 62, 62, 0.6)',
+  'rgba(65, 62, 62, 0.45)',
+  'rgba(65, 62, 62, 0.3)',
+  'rgba(65, 62, 62, 0.18)'
+];
 const CONFIG = { width: 1000, height: 400, padding: { top: 40, right: 40, bottom: 70, left: 60 } };

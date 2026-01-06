@@ -26,7 +26,7 @@ function renderBarChart(clusters, isDark) {
       const barH = (pt.value / maxVal) * chartH;
       const x = startX + pi * (barW + 2);
       const y = height - padding.bottom - barH;
-      svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}"/>`;
+      svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}" rx="3" ry="3"/>`;
     });
 
     svg += `<text x="${cx}" y="${height - padding.bottom + 35}" text-anchor="middle" fill="${isDark ? '#888' : '#666'}" font-family="monospace" font-size="9">${cluster.name}</text>`;
@@ -150,7 +150,7 @@ function renderStackedChart(clusters, isDark) {
     c.points.forEach((pt, pi) => {
       const segH = (pt.value / maxStacked) * chartH;
       const y = curY - segH;
-      svg += `<rect class="bar" data-cluster="${c.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${segH}" fill="${COLORS[pi % COLORS.length]}"/>`;
+      svg += `<rect class="bar" data-cluster="${c.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${segH}" fill="${COLORS[pi % COLORS.length]}" rx="2" ry="2"/>`;
       curY = y;
     });
 
