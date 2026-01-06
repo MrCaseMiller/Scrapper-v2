@@ -85,18 +85,22 @@
       padding: 10px 14px;
       background: transparent;
       color: rgba(65, 62, 62, 0.9);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.5px;
       border-bottom: 1px solid rgba(65, 62, 62, 0.1);
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
     }
     .tooltip-body { padding: 12px 14px; }
     .tooltip-row {
       display: flex;
       justify-content: space-between;
       padding: 4px 0;
-      font-size: 11px;
+      font-size: 10px;
       color: rgba(65, 62, 62, 0.8);
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
     }
     .tooltip-row span:first-child { display: flex; align-items: center; gap: 8px; }
     .tooltip-swatch { width: 10px; height: 10px; border-radius: var(--radius-sm); }
@@ -195,55 +199,55 @@
       title: 'Standard vs Ablation Studies',
       yAxisLabel: 'Success Rate',
       clusters: [
-        { id: 'scrub_dish', name: 'EVAL: Scrub dish with sponge', points: [
+        { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
           { label: 'Standard', value: 21 },
           { label: 'no_ego', value: 0 },
           { label: '10pct', value: 0 },
           { label: 'no_cap_upsample', value: 0 }
         ]},
-        { id: 'closing_door', name: 'EVAL: Closing the sliding door', points: [
+        { id: 'closing_door', name: 'Closing the sliding door', points: [
           { label: 'Standard', value: 52 },
           { label: 'no_ego', value: 34 },
           { label: '10pct', value: 21 },
           { label: 'no_cap_upsample', value: 21 }
         ]},
-        { id: 'watering_can', name: 'EVAL: watering can', points: [
+        { id: 'watering_can', name: 'Watering can', points: [
           { label: 'Standard', value: 52 },
           { label: 'no_ego', value: 34 },
           { label: '10pct', value: 28 },
           { label: 'no_cap_upsample', value: 25 }
         ]},
-        { id: 'steam_shirt', name: 'EVAL: Steam the shirt', points: [
+        { id: 'steam_shirt', name: 'Steam the shirt', points: [
           { label: 'Standard', value: 95 },
           { label: 'no_ego', value: 26 },
           { label: '10pct', value: 73 },
           { label: 'no_cap_upsample', value: 33 }
         ]},
-        { id: 'iron_shirt', name: 'EVAL: Iron shirt', points: [
+        { id: 'iron_shirt', name: 'Iron shirt', points: [
           { label: 'Standard', value: 0 },
           { label: 'no_ego', value: 0 },
           { label: '10pct', value: 11 },
           { label: 'no_cap_upsample', value: 0 }
         ]},
-        { id: 'pick_up_pot', name: 'EVAL: Pick up pot', points: [
+        { id: 'pick_up_pot', name: 'Pick up pot', points: [
           { label: 'Standard', value: 52 },
           { label: 'no_ego', value: 48 },
           { label: '10pct', value: 35 },
           { label: 'no_cap_upsample', value: 25 }
         ]},
-        { id: 'pick_up_box', name: 'EVAL: Pick up box with both hands', points: [
+        { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
           { label: 'Standard', value: 21 },
           { label: 'no_ego', value: 35 },
           { label: '10pct', value: 28 },
           { label: 'no_cap_upsample', value: 21 }
         ]},
-        { id: 'pull_tissue', name: 'EVAL: Pull tissue', points: [
+        { id: 'pull_tissue', name: 'Pull tissue', points: [
           { label: 'Standard', value: 52 },
           { label: 'no_ego', value: 35 },
           { label: '10pct', value: 21 },
           { label: 'no_cap_upsample', value: 21 }
         ]},
-        { id: 'grab_chips', name: 'EVAL: Grab bag of chips', points: [
+        { id: 'grab_chips', name: 'Grab bag of chips', points: [
           { label: 'Standard', value: 85 },
           { label: 'no_ego', value: 70 },
           { label: '10pct', value: 98 },
@@ -262,8 +266,8 @@
 
     const CONFIG = {
       width: 1200,
-      height: 420,
-      padding: { top: 40, right: 40, bottom: 100, left: 70 }
+      height: 380,
+      padding: { top: 40, right: 40, bottom: 50, left: 70 }
     };
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -305,10 +309,8 @@
           svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}" rx="2" ry="2"/>`;
         });
 
-        // X-axis labels (rotated)
-        const labelX = cx;
-        const labelY = height - padding.bottom + 12;
-        svg += `<text x="${labelX}" y="${labelY}" text-anchor="start" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8" transform="rotate(45, ${labelX}, ${labelY})">${cluster.name}</text>`;
+        // X-axis labels (horizontal)
+        svg += `<text x="${cx}" y="${height - padding.bottom + 20}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${cluster.name}</text>`;
       });
 
       // Axes
