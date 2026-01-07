@@ -193,144 +193,116 @@
     // ═══════════════════════════════════════════════════════════════════════
     // DATA: Standard vs Ablation Studies
     // ═══════════════════════════════════════════════════════════════════════
+    // DATA SOURCE: WM Dec 2025 Blog Post Figures - success_rate_and_ablation.csv
+    // Note: "Iron shirt" excluded (only has 10pct data)
+    // ═══════════════════════════════════════════════════════════════════════
     const ABLATION_DATA = {
       title: 'Standard vs Ablation Studies',
       yAxisLabel: 'Success Rate',
       clusters: [
+        { id: 'closing_door', name: 'Closing the sliding door', points: [
+          { label: 'Standard', value: 76.7 },
+          { label: 'no_ego', value: 36.7 },
+          { label: '10pct', value: 36.7 },
+          { label: 'no_cap_upsample', value: 20 }
+        ]},
+        { id: 'grab_chips', name: 'Grab bag of chips', points: [
+          { label: 'Standard', value: 80 },
+          { label: 'no_ego', value: 80 },
+          { label: '10pct', value: 96.7 },
+          { label: 'no_cap_upsample', value: 73.3 }
+        ]},
+        { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
+          { label: 'Standard', value: 20 },
+          { label: 'no_ego', value: 36 },
+          { label: '10pct', value: 46.7 },
+          { label: 'no_cap_upsample', value: 0 }
+        ]},
+        { id: 'pull_tissue', name: 'Pull tissue', points: [
+          { label: 'Standard', value: 50 },
+          { label: 'no_ego', value: 26.7 },
+          { label: '10pct', value: 60 },
+          { label: 'no_cap_upsample', value: 0 }
+        ]},
         { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
-          { label: 'Standard', value: 21 },
+          { label: 'Standard', value: 20 },
           { label: 'no_ego', value: 0 },
           { label: '10pct', value: 0 },
           { label: 'no_cap_upsample', value: 0 }
         ]},
-        { id: 'closing_door', name: 'Closing the sliding door', points: [
-          { label: 'Standard', value: 52 },
-          { label: 'no_ego', value: 34 },
-          { label: '10pct', value: 21 },
-          { label: 'no_cap_upsample', value: 21 }
-        ]},
-        { id: 'watering_can', name: 'Watering can', points: [
-          { label: 'Standard', value: 52 },
-          { label: 'no_ego', value: 34 },
-          { label: '10pct', value: 28 },
-          { label: 'no_cap_upsample', value: 25 }
-        ]},
         { id: 'steam_shirt', name: 'Steam the shirt', points: [
-          { label: 'Standard', value: 95 },
-          { label: 'no_ego', value: 26 },
-          { label: '10pct', value: 73 },
-          { label: 'no_cap_upsample', value: 33 }
-        ]},
-        { id: 'iron_shirt', name: 'Iron shirt', points: [
-          { label: 'Standard', value: 0 },
-          { label: 'no_ego', value: 0 },
-          { label: '10pct', value: 11 },
+          { label: 'Standard', value: 93.3 },
+          { label: 'no_ego', value: 33.3 },
+          { label: '10pct', value: 73.3 },
           { label: 'no_cap_upsample', value: 0 }
         ]},
-        { id: 'pick_up_pot', name: 'Pick up pot', points: [
-          { label: 'Standard', value: 52 },
-          { label: 'no_ego', value: 48 },
-          { label: '10pct', value: 35 },
-          { label: 'no_cap_upsample', value: 25 }
-        ]},
-        { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
-          { label: 'Standard', value: 21 },
-          { label: 'no_ego', value: 35 },
-          { label: '10pct', value: 28 },
-          { label: 'no_cap_upsample', value: 21 }
-        ]},
-        { id: 'pull_tissue', name: 'Pull tissue', points: [
-          { label: 'Standard', value: 52 },
-          { label: 'no_ego', value: 35 },
-          { label: '10pct', value: 21 },
-          { label: 'no_cap_upsample', value: 21 }
-        ]},
-        { id: 'grab_chips', name: 'Grab bag of chips', points: [
-          { label: 'Standard', value: 85 },
-          { label: 'no_ego', value: 70 },
-          { label: '10pct', value: 98 },
-          { label: 'no_cap_upsample', value: 70 }
+        { id: 'watering_can', name: 'Watering can', points: [
+          { label: 'Standard', value: 60 },
+          { label: 'no_ego', value: 20 },
+          { label: '10pct', value: 30 },
+          { label: 'no_cap_upsample', value: 60 }
         ]}
       ]
     };
 
     // Monochrome palette based on rgba(65, 62, 62)
     // ═══════════════════════════════════════════════════════════════════════
-    // DATA: Delta Performance (difference from Standard baseline)
+    // DATA: Delta Performance (from CSV delta columns)
     // ═══════════════════════════════════════════════════════════════════════
     const DELTA_DATA = {
       title: 'Ablation Delta Performance vs Standard',
       yAxisLabel: 'Δ Success Rate vs Standard',
       clusters: [
         { id: 'closing_door', name: 'Closing the sliding door', points: [
-          { label: 'no_ego - Standard', value: -18 },
-          { label: '10pct - Standard', value: -31 },
-          { label: 'no_cap_upsample - Standard', value: -31 }
+          { label: 'no_ego - Standard', value: -40 },
+          { label: '10pct - Standard', value: -40 },
+          { label: 'no_cap_upsample - Standard', value: -56.7 }
         ]},
-        { id: 'watering_can', name: 'Watering can', points: [
-          { label: 'no_ego - Standard', value: -18 },
-          { label: '10pct - Standard', value: -24 },
-          { label: 'no_cap_upsample - Standard', value: -27 }
-        ]},
-        { id: 'steam_shirt', name: 'Steam the shirt', points: [
-          { label: 'no_ego - Standard', value: -69 },
-          { label: '10pct - Standard', value: -22 },
-          { label: 'no_cap_upsample - Standard', value: -62 }
-        ]},
-        { id: 'iron_shirt', name: 'Iron shirt', points: [
+        { id: 'grab_chips', name: 'Grab bag of chips', points: [
           { label: 'no_ego - Standard', value: 0 },
-          { label: '10pct - Standard', value: 11 },
-          { label: 'no_cap_upsample - Standard', value: 0 }
-        ]},
-        { id: 'pick_up_pot', name: 'Pick up pot', points: [
-          { label: 'no_ego - Standard', value: -4 },
-          { label: '10pct - Standard', value: -17 },
-          { label: 'no_cap_upsample - Standard', value: -27 }
+          { label: '10pct - Standard', value: 16.7 },
+          { label: 'no_cap_upsample - Standard', value: -6.7 }
         ]},
         { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
-          { label: 'no_ego - Standard', value: 14 },
-          { label: '10pct - Standard', value: 7 },
+          { label: 'no_ego - Standard', value: 16 },
+          { label: '10pct - Standard', value: 26.7 },
           { label: 'no_cap_upsample - Standard', value: 0 }
         ]},
         { id: 'pull_tissue', name: 'Pull tissue', points: [
-          { label: 'no_ego - Standard', value: -17 },
-          { label: '10pct - Standard', value: -31 },
-          { label: 'no_cap_upsample - Standard', value: -31 }
-        ]},
-        { id: 'grab_chips', name: 'Grab bag of chips', points: [
-          { label: 'no_ego - Standard', value: -15 },
-          { label: '10pct - Standard', value: 13 },
-          { label: 'no_cap_upsample - Standard', value: -15 }
+          { label: 'no_ego - Standard', value: -23.3 },
+          { label: '10pct - Standard', value: 10 },
+          { label: 'no_cap_upsample - Standard', value: -50 }
         ]},
         { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
-          { label: 'no_ego - Standard', value: -21 },
-          { label: '10pct - Standard', value: -21 },
-          { label: 'no_cap_upsample - Standard', value: -21 }
+          { label: 'no_ego - Standard', value: -20 },
+          { label: '10pct - Standard', value: -20 },
+          { label: 'no_cap_upsample - Standard', value: -20 }
+        ]},
+        { id: 'steam_shirt', name: 'Steam the shirt', points: [
+          { label: 'no_ego - Standard', value: -60 },
+          { label: '10pct - Standard', value: -20 },
+          { label: 'no_cap_upsample - Standard', value: 0 }
+        ]},
+        { id: 'watering_can', name: 'Watering can', points: [
+          { label: 'no_ego - Standard', value: -40 },
+          { label: '10pct - Standard', value: -30 },
+          { label: 'no_cap_upsample - Standard', value: 0 }
         ]}
       ]
     };
 
     // ═══════════════════════════════════════════════════════════════════════
-    // DATA: Standard Model Success Rate (single series)
+    // DATA: Standard Model Success Rate (from CSV success_rate_Standard)
     // ═══════════════════════════════════════════════════════════════════════
     const STANDARD_DATA = {
       title: 'Standard Model Success Rate by Task',
       yAxisLabel: 'Success Rate',
       clusters: [
-        { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
-          { label: 'Standard', value: 20 }
-        ]},
         { id: 'closing_door', name: 'Closing the sliding door', points: [
-          { label: 'Standard', value: 77 }
+          { label: 'Standard', value: 76.7 }
         ]},
-        { id: 'watering_can', name: 'Watering can', points: [
-          { label: 'Standard', value: 60 }
-        ]},
-        { id: 'steam_shirt', name: 'Steam the shirt', points: [
-          { label: 'Standard', value: 94 }
-        ]},
-        { id: 'pick_up_pot', name: 'Pick up pot', points: [
-          { label: 'Standard', value: 14 }
+        { id: 'grab_chips', name: 'Grab bag of chips', points: [
+          { label: 'Standard', value: 80 }
         ]},
         { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
           { label: 'Standard', value: 20 }
@@ -338,8 +310,14 @@
         { id: 'pull_tissue', name: 'Pull tissue', points: [
           { label: 'Standard', value: 50 }
         ]},
-        { id: 'grab_chips', name: 'Grab bag of chips', points: [
-          { label: 'Standard', value: 80 }
+        { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
+          { label: 'Standard', value: 20 }
+        ]},
+        { id: 'steam_shirt', name: 'Steam the shirt', points: [
+          { label: 'Standard', value: 93.3 }
+        ]},
+        { id: 'watering_can', name: 'Watering can', points: [
+          { label: 'Standard', value: 60 }
         ]}
       ]
     };
