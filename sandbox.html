@@ -68,37 +68,38 @@
 
     .tooltip {
       position: fixed;
-      background: rgba(245, 242, 235, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(120, 115, 100, 0.55);
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
       min-width: 200px;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.2s ease;
       z-index: 1000;
-      border-radius: 12px;
+      border-radius: 16px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
     }
     .tooltip.visible { opacity: 1; }
     .tooltip-header {
-      padding: 10px 14px;
+      padding: 12px 16px 8px;
       background: transparent;
-      color: rgba(45, 42, 42, 1);
-      font-size: 10px;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.5px;
-      border-bottom: 1px solid rgba(65, 62, 62, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       font-family: 'Courier New', monospace;
       text-transform: uppercase;
     }
-    .tooltip-body { padding: 12px 14px; }
+    .tooltip-body { padding: 10px 16px 14px; }
     .tooltip-row {
       display: flex;
       justify-content: space-between;
       padding: 4px 0;
       font-size: 10px;
-      color: rgba(45, 42, 42, 0.95);
+      color: rgba(255, 255, 255, 0.85);
       font-family: 'Courier New', monospace;
       text-transform: uppercase;
     }
@@ -385,7 +386,7 @@
       const maxVal = 100; // Success rate 0-100%
       const clusterW = chartW / clusters.length;
       const maxBars = Math.max(...clusters.map(c => c.points.length));
-      const barW = Math.max(6, (clusterW - 16) / maxBars - 2);
+      const barW = Math.max(4, (clusterW - 20) / maxBars - 4);
 
       let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
       svg += `<rect width="100%" height="100%" fill="#f5f5f5" rx="4"/>`;
@@ -450,7 +451,7 @@
 
       const clusterW = chartW / clusters.length;
       // Use 4 bars to match Graph 1 bar width
-      const barW = Math.max(6, (clusterW - 16) / 4 - 2);
+      const barW = Math.max(4, (clusterW - 20) / 4 - 4);
 
       // Zero line position (proportional to data range)
       const zeroY = padding.top + (maxVal / range) * chartH;
@@ -514,7 +515,7 @@
       const maxVal = 100; // Success rate 0-100%
       const clusterW = chartW / clusters.length;
       // Use consistent bar width matching other charts
-      const barW = Math.max(6, (clusterW - 16) / 4 - 2);
+      const barW = Math.max(4, (clusterW - 20) / 4 - 4);
 
       let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
       svg += `<rect width="100%" height="100%" fill="#f5f5f5" rx="4"/>`;
