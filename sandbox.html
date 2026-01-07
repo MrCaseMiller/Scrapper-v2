@@ -361,9 +361,40 @@
 
     const CONFIG = {
       width: 960,
-      height: 340,
-      padding: { top: 30, right: 30, bottom: 45, left: 55 }
+      height: 360,
+      padding: { top: 30, right: 30, bottom: 65, left: 55 }
     };
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // TEXT WRAPPING HELPER
+    // ═══════════════════════════════════════════════════════════════════════
+    function wrapText(text, x, y, maxWidth, lineHeight = 10) {
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = '';
+
+      // Approximate: ~6px per character at font-size 8
+      const charWidth = 5;
+      const maxChars = Math.floor(maxWidth / charWidth);
+
+      words.forEach(word => {
+        const testLine = currentLine ? currentLine + ' ' + word : word;
+        if (testLine.length > maxChars && currentLine) {
+          lines.push(currentLine);
+          currentLine = word;
+        } else {
+          currentLine = testLine;
+        }
+      });
+      if (currentLine) lines.push(currentLine);
+
+      // Center vertically around y
+      const startY = y - ((lines.length - 1) * lineHeight) / 2;
+
+      return lines.map((line, i) =>
+        `<tspan x="${x}" dy="${i === 0 ? 0 : lineHeight}">${line}</tspan>`
+      ).join('');
+    }
 
     // ═══════════════════════════════════════════════════════════════════════
     // BAR CHART RENDERER
@@ -404,8 +435,8 @@
           svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[pi % COLORS.length]}" rx="2" ry="2"/>`;
         });
 
-        // X-axis labels (horizontal)
-        svg += `<text x="${cx}" y="${height - padding.bottom + 20}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${cluster.name}</text>`;
+        // X-axis labels (wrapped, centered)
+        svg += `<text x="${cx}" y="${height - padding.bottom + 15}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${wrapText(cluster.name, cx, height - padding.bottom + 15, clusterW - 8)}</text>`;
       });
 
       // Axes
@@ -474,8 +505,8 @@
           svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="${pi}" data-type="delta" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${DELTA_COLORS[pi % DELTA_COLORS.length]}" rx="2" ry="2"/>`;
         });
 
-        // X-axis labels (horizontal)
-        svg += `<text x="${cx}" y="${height - padding.bottom + 20}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${cluster.name}</text>`;
+        // X-axis labels (wrapped, centered)
+        svg += `<text x="${cx}" y="${height - padding.bottom + 15}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${wrapText(cluster.name, cx, height - padding.bottom + 15, clusterW - 8)}</text>`;
       });
 
       // Axes
@@ -530,8 +561,8 @@
         const y = height - padding.bottom - barH;
         svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="0" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[0]}" rx="2" ry="2"/>`;
 
-        // X-axis labels (horizontal)
-        svg += `<text x="${cx}" y="${height - padding.bottom + 20}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${cluster.name}</text>`;
+        // X-axis labels (wrapped, centered)
+        svg += `<text x="${cx}" y="${height - padding.bottom + 15}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${wrapText(cluster.name, cx, height - padding.bottom + 15, clusterW - 8)}</text>`;
       });
 
       // Axes
