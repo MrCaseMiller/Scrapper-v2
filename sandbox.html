@@ -168,19 +168,18 @@
       </div>
     </div>
 
-    <!-- Graph 3: Placeholder -->
+    <!-- Graph 3: Standard Model Success Rate -->
     <div class="graph-section">
       <div class="graph-container">
         <div class="graph-header">
           <div>
-            <span class="title">Graph 3</span>
-            <span class="subtitle"> — Awaiting Data</span>
+            <span class="title">Standard Model Success Rate by Task</span>
+            <span class="subtitle"> — ±1 SE</span>
           </div>
+          <button class="export-btn" onclick="exportSvg('graph3')">EXPORT SVG</button>
         </div>
-        <div class="placeholder">
-          <div class="placeholder-title">GRAPH PLACEHOLDER</div>
-          <div>Add data to render this graph</div>
-        </div>
+        <div class="graph-body" id="graph3"></div>
+        <div class="legend" id="legend3"></div>
       </div>
     </div>
   </div>
@@ -307,6 +306,40 @@
           { label: 'no_ego - Standard', value: -21 },
           { label: '10pct - Standard', value: -21 },
           { label: 'no_cap_upsample - Standard', value: -21 }
+        ]}
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: Standard Model Success Rate (single series)
+    // ═══════════════════════════════════════════════════════════════════════
+    const STANDARD_DATA = {
+      title: 'Standard Model Success Rate by Task',
+      yAxisLabel: 'Success Rate',
+      clusters: [
+        { id: 'scrub_dish', name: 'Scrub dish with sponge', points: [
+          { label: 'Standard', value: 20 }
+        ]},
+        { id: 'closing_door', name: 'Closing the sliding door', points: [
+          { label: 'Standard', value: 77 }
+        ]},
+        { id: 'watering_can', name: 'Watering can', points: [
+          { label: 'Standard', value: 60 }
+        ]},
+        { id: 'steam_shirt', name: 'Steam the shirt', points: [
+          { label: 'Standard', value: 94 }
+        ]},
+        { id: 'pick_up_pot', name: 'Pick up pot', points: [
+          { label: 'Standard', value: 14 }
+        ]},
+        { id: 'pick_up_box', name: 'Pick up box with both hands', points: [
+          { label: 'Standard', value: 20 }
+        ]},
+        { id: 'pull_tissue', name: 'Pull tissue', points: [
+          { label: 'Standard', value: 50 }
+        ]},
+        { id: 'grab_chips', name: 'Grab bag of chips', points: [
+          { label: 'Standard', value: 80 }
         ]}
       ]
     };
@@ -462,6 +495,62 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════
+    // SINGLE BAR CHART RENDERER (one bar per cluster)
+    // ═══════════════════════════════════════════════════════════════════════
+    function renderSingleBarChart(data, containerId) {
+      const { width, height, padding } = CONFIG;
+      const clusters = data.clusters;
+      const chartW = width - padding.left - padding.right;
+      const chartH = height - padding.top - padding.bottom;
+      const maxVal = 100; // Success rate 0-100%
+      const clusterW = chartW / clusters.length;
+      // Use consistent bar width matching other charts
+      const barW = Math.max(6, (clusterW - 16) / 4 - 2);
+
+      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
+      svg += `<rect width="100%" height="100%" fill="#f5f5f5" rx="4"/>`;
+
+      // Y-axis label
+      svg += `<text x="20" y="${height/2}" text-anchor="middle" fill="rgba(65,62,62,0.6)" font-family="monospace" font-size="10" transform="rotate(-90, 20, ${height/2})">${data.yAxisLabel}</text>`;
+
+      // Grid lines and Y-axis labels
+      for (let i = 0; i <= 10; i++) {
+        const y = padding.top + (i / 10) * chartH;
+        const val = (100 - (i / 10) * 100) / 100;
+        svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+        svg += `<text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" fill="rgba(65,62,62,0.5)" font-family="monospace" font-size="9">${val.toFixed(1)}</text>`;
+      }
+
+      // Bars (single bar per cluster, centered)
+      clusters.forEach((cluster, ci) => {
+        const cx = padding.left + (ci + 0.5) * clusterW;
+        const pt = cluster.points[0];
+        const barH = (pt.value / maxVal) * chartH;
+        const x = cx - barW / 2;
+        const y = height - padding.bottom - barH;
+        svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="0" x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[0]}" rx="2" ry="2"/>`;
+
+        // X-axis labels (horizontal)
+        svg += `<text x="${cx}" y="${height - padding.bottom + 20}" text-anchor="middle" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="8">${cluster.name}</text>`;
+      });
+
+      // Axes
+      svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${height - padding.bottom}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
+      svg += `<line x1="${padding.left}" y1="${height - padding.bottom}" x2="${width - padding.right}" y2="${height - padding.bottom}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
+
+      svg += '</svg>';
+
+      document.getElementById(containerId).innerHTML = svg;
+
+      // Attach event listeners
+      document.querySelectorAll(`#${containerId} .bar`).forEach(bar => {
+        bar.addEventListener('mouseenter', (e) => showSingleTooltip(e, data));
+        bar.addEventListener('mousemove', moveTooltip);
+        bar.addEventListener('mouseleave', hideTooltip);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
     // LEGEND
     // ═══════════════════════════════════════════════════════════════════════
     function renderLegend(data, containerId) {
@@ -517,6 +606,19 @@
       document.getElementById('tooltip').classList.add('visible');
     }
 
+    function showSingleTooltip(e, data) {
+      const clusterId = e.target.getAttribute('data-cluster');
+      const cluster = data.clusters.find(c => c.id === clusterId);
+      if (!cluster) return;
+
+      document.getElementById('tooltipHeader').textContent = cluster.name;
+      document.getElementById('tooltipBody').innerHTML = cluster.points.map((pt, i) =>
+        `<div class="tooltip-row"><span><div class="tooltip-swatch" style="background:${COLORS[0]}"></div>${pt.label}</span><strong>${(pt.value / 100).toFixed(2)}</strong></div>`
+      ).join('');
+
+      document.getElementById('tooltip').classList.add('visible');
+    }
+
     // ═══════════════════════════════════════════════════════════════════════
     // EXPORT
     // ═══════════════════════════════════════════════════════════════════════
@@ -538,6 +640,9 @@
 
     renderDeltaChart(DELTA_DATA, 'graph2');
     renderDeltaLegend(DELTA_DATA, 'legend2');
+
+    renderSingleBarChart(STANDARD_DATA, 'graph3');
+    renderLegend(STANDARD_DATA, 'legend3');
   </script>
 </body>
 </html>
