@@ -199,6 +199,51 @@
         <div class="legend" id="legend4"></div>
       </div>
     </div>
+
+    <!-- Graph 5: Encord Summary -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Encord Summary</span>
+            <span class="subtitle"> — Overall Acceptance Rate by Model</span>
+          </div>
+          <button class="export-btn" onclick="exportSvg('graph5')">EXPORT SVG</button>
+        </div>
+        <div class="graph-body" id="graph5"></div>
+        <div class="legend" id="legend5"></div>
+      </div>
+    </div>
+
+    <!-- Graph 6: Data Mix by Action -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Data Mix by Action</span>
+            <span class="subtitle"> — Segment Percentage</span>
+          </div>
+          <button class="export-btn" onclick="exportSvg('graph6')">EXPORT SVG</button>
+        </div>
+        <div class="graph-body" id="graph6"></div>
+        <div class="legend" id="legend6"></div>
+      </div>
+    </div>
+
+    <!-- Graph 7: 1 vs 8 Server Comparison -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">1 vs 8 Server Comparison</span>
+            <span class="subtitle"> — Pick Up Tissue Task Success Rate</span>
+          </div>
+          <button class="export-btn" onclick="exportSvg('graph7')">EXPORT SVG</button>
+        </div>
+        <div class="graph-body" id="graph7"></div>
+        <div class="legend" id="legend7"></div>
+      </div>
+    </div>
   </div>
 
   <div class="tooltip" id="tooltip">
@@ -367,6 +412,53 @@
           { label: 'M3', value: 56.60 },
           { label: 'M4', value: 46.57 }
         ]}
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: Encord Summary (from CSV - overall acceptance by model)
+    // ═══════════════════════════════════════════════════════════════════════
+    const ENCORD_SUMMARY_DATA = {
+      title: 'Encord Summary',
+      yAxisLabel: 'Acceptance Rate',
+      clusters: [
+        { id: 'm0', name: 'M0', points: [{ label: 'M0', value: 41.20 }] },
+        { id: 'm1', name: 'M1', points: [{ label: 'M1', value: 57.70 }] },
+        { id: 'm2', name: 'M2', points: [{ label: 'M2', value: 51.22 }] },
+        { id: 'm3', name: 'M3', points: [{ label: 'M3', value: 60.04 }] },
+        { id: 'm4', name: 'M4', points: [{ label: 'M4', value: 57.65 }] }
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: Data Mix (from CSV - action breakdown by segment percentage)
+    // ═══════════════════════════════════════════════════════════════════════
+    const DATA_MIX_DATA = {
+      title: 'Data Mix by Action',
+      yAxisLabel: 'Segment Percentage',
+      clusters: [
+        { id: 'pick', name: 'Pick', points: [{ label: 'Pick', value: 69.38 }] },
+        { id: 'place', name: 'Place', points: [{ label: 'Place', value: 29.30 }] },
+        { id: 'other', name: 'Other', points: [{ label: 'Other', value: 1.32 }] },
+        { id: 'close', name: 'Close', points: [{ label: 'Close', value: 0.43 }] },
+        { id: 'open', name: 'Open', points: [{ label: 'Open', value: 0.36 }] },
+        { id: 'default', name: 'Default', points: [{ label: 'Default', value: 0.25 }] },
+        { id: 'pour', name: 'Pour', points: [{ label: 'Pour', value: 0.11 }] },
+        { id: 'wipe', name: 'Wipe', points: [{ label: 'Wipe', value: 0.07 }] },
+        { id: 'stack', name: 'Stack', points: [{ label: 'Stack', value: 0.05 }] },
+        { id: 'push', name: 'Push', points: [{ label: 'Push', value: 0.05 }] }
+      ]
+    };
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: 1 vs 8 Server Comparison (from CSV - pick up tissue task)
+    // ═══════════════════════════════════════════════════════════════════════
+    const SERVER_COMPARISON_DATA = {
+      title: '1 vs 8 Server Comparison',
+      yAxisLabel: 'Success Rate',
+      clusters: [
+        { id: '1_server', name: '1 Server', points: [{ label: '1 Server', value: 30.00 }] },
+        { id: '8_server', name: '8 Server', points: [{ label: '8 Server', value: 45.00 }] }
       ]
     };
 
@@ -713,6 +805,15 @@
 
     renderBarChart(ENCORD_BREAKDOWN_DATA, 'graph4');
     renderLegend(ENCORD_BREAKDOWN_DATA, 'legend4');
+
+    renderSingleBarChart(ENCORD_SUMMARY_DATA, 'graph5');
+    renderLegend(ENCORD_SUMMARY_DATA, 'legend5');
+
+    renderSingleBarChart(DATA_MIX_DATA, 'graph6');
+    renderLegend(DATA_MIX_DATA, 'legend6');
+
+    renderSingleBarChart(SERVER_COMPARISON_DATA, 'graph7');
+    renderLegend(SERVER_COMPARISON_DATA, 'legend7');
   </script>
 </body>
 </html>
