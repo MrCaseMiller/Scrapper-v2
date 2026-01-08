@@ -184,6 +184,21 @@
         <div class="legend" id="legend3"></div>
       </div>
     </div>
+
+    <!-- Graph 4: Encord Experiment Breakdown -->
+    <div class="graph-section">
+      <div class="graph-container">
+        <div class="graph-header">
+          <div>
+            <span class="title">Encord Experiment Breakdown</span>
+            <span class="subtitle"> — Acceptance Rate by Group</span>
+          </div>
+          <button class="export-btn" onclick="exportSvg('graph4')">EXPORT SVG</button>
+        </div>
+        <div class="graph-body" id="graph4"></div>
+        <div class="legend" id="legend4"></div>
+      </div>
+    </div>
   </div>
 
   <div class="tooltip" id="tooltip">
@@ -324,12 +339,44 @@
       ]
     };
 
+    // ═══════════════════════════════════════════════════════════════════════
+    // DATA: Encord Experiment Breakdown (from CSV)
+    // ═══════════════════════════════════════════════════════════════════════
+    const ENCORD_BREAKDOWN_DATA = {
+      title: 'Encord Experiment Breakdown',
+      yAxisLabel: 'Acceptance Rate',
+      clusters: [
+        { id: 'in_distribution', name: 'In Distribution', points: [
+          { label: 'M0', value: 30.86 },
+          { label: 'M1', value: 55.42 },
+          { label: 'M2', value: 37.65 },
+          { label: 'M3', value: 51.00 },
+          { label: 'M4', value: 62.00 }
+        ]},
+        { id: 'new_tasks', name: 'New Tasks', points: [
+          { label: 'M0', value: 54.11 },
+          { label: 'M1', value: 65.58 },
+          { label: 'M2', value: 63.01 },
+          { label: 'M3', value: 72.58 },
+          { label: 'M4', value: 64.37 }
+        ]},
+        { id: 't2i', name: 'T2I', points: [
+          { label: 'M0', value: 38.63 },
+          { label: 'M1', value: 52.21 },
+          { label: 'M2', value: 53.04 },
+          { label: 'M3', value: 56.60 },
+          { label: 'M4', value: 46.57 }
+        ]}
+      ]
+    };
+
     // Monochrome palette based on rgba(65, 62, 62)
     const COLORS = [
       'rgba(65, 62, 62, 1)',
-      'rgba(65, 62, 62, 0.7)',
-      'rgba(65, 62, 62, 0.45)',
-      'rgba(65, 62, 62, 0.25)'
+      'rgba(65, 62, 62, 0.8)',
+      'rgba(65, 62, 62, 0.6)',
+      'rgba(65, 62, 62, 0.4)',
+      'rgba(65, 62, 62, 0.2)'
     ];
 
     // Delta chart colors (3 series only)
@@ -663,6 +710,9 @@
 
     renderSingleBarChart(STANDARD_DATA, 'graph3');
     renderLegend(STANDARD_DATA, 'legend3');
+
+    renderBarChart(ENCORD_BREAKDOWN_DATA, 'graph4');
+    renderLegend(ENCORD_BREAKDOWN_DATA, 'legend4');
   </script>
 </body>
 </html>
