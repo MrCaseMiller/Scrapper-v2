@@ -710,6 +710,69 @@
     }
 
     // ═══════════════════════════════════════════════════════════════════════
+    // HORIZONTAL BAR CHART RENDERER (bars extend left to right)
+    // ═══════════════════════════════════════════════════════════════════════
+    function renderHorizontalBarChart(data, containerId) {
+      const { width, padding } = CONFIG;
+      const clusters = data.clusters;
+      const height = 200; // Shorter height for horizontal layout
+      const chartW = width - padding.left - padding.right;
+      const barH = 5; // Line thickness
+      const rowH = Math.min(60, (height - padding.top - 40) / clusters.length);
+      const chartH = rowH * clusters.length;
+      const maxVal = 100;
+
+      let svg = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
+      svg += `<rect width="100%" height="100%" fill="#f5f5f5" rx="4"/>`;
+
+      // X-axis label (centered on chart area)
+      const xLabelX = padding.left + chartW / 2;
+      const xLabelY = height - 10;
+      svg += `<text x="${xLabelX}" y="${xLabelY}" text-anchor="middle" fill="rgba(65,62,62,0.6)" font-family="monospace" font-size="10">${toTitleCase(data.yAxisLabel)}</text>`;
+
+      // Vertical grid lines and X-axis labels
+      for (let i = 0; i <= 10; i++) {
+        const x = padding.left + (i / 10) * chartW;
+        const val = (i / 10);
+        svg += `<line x1="${x}" y1="${padding.top}" x2="${x}" y2="${padding.top + chartH}" stroke="#e0e0e0" stroke-width="0.5"/>`;
+        svg += `<text x="${x}" y="${padding.top + chartH + 15}" text-anchor="middle" fill="rgba(65,62,62,0.5)" font-family="monospace" font-size="9">${val.toFixed(1)}</text>`;
+      }
+
+      // Hit areas and Bars (horizontal)
+      clusters.forEach((cluster, ci) => {
+        const cy = padding.top + (ci + 0.5) * rowH;
+        const rowY = padding.top + ci * rowH;
+        const pt = cluster.points[0];
+        const barW = (pt.value / maxVal) * chartW;
+        const y = cy - barH / 2;
+
+        // Full row hit area (transparent, for hover)
+        svg += `<rect class="hit-area" data-cluster="${cluster.id}" x="${padding.left}" y="${rowY}" width="${chartW}" height="${rowH}"/>`;
+
+        // Horizontal bar
+        svg += `<rect class="bar" data-cluster="${cluster.id}" data-idx="0" x="${padding.left}" y="${y}" width="${barW}" height="${barH}" fill="${COLORS[0]}"/>`;
+
+        // Y-axis labels (category names on left)
+        svg += `<text x="${padding.left - 12}" y="${cy + 4}" text-anchor="end" fill="rgba(65,62,62,0.7)" font-family="monospace" font-size="9">${toTitleCase(cluster.name)}</text>`;
+      });
+
+      // Axes
+      svg += `<line x1="${padding.left}" y1="${padding.top}" x2="${padding.left}" y2="${padding.top + chartH}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
+      svg += `<line x1="${padding.left}" y1="${padding.top + chartH}" x2="${width - padding.right}" y2="${padding.top + chartH}" stroke="rgba(65,62,62,0.3)" stroke-width="1"/>`;
+
+      svg += '</svg>';
+
+      document.getElementById(containerId).innerHTML = svg;
+
+      // Attach event listeners to hit areas
+      document.querySelectorAll(`#${containerId} .hit-area`).forEach(area => {
+        area.addEventListener('mouseenter', (e) => showSingleTooltip(e, data));
+        area.addEventListener('mousemove', moveTooltip);
+        area.addEventListener('mouseleave', hideTooltip);
+      });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
     // LEGEND
     // ═══════════════════════════════════════════════════════════════════════
     function renderLegend(data, containerId) {
@@ -812,7 +875,7 @@
     renderSingleBarChart(DATA_MIX_DATA, 'graph6');
     renderLegend(DATA_MIX_DATA, 'legend6');
 
-    renderSingleBarChart(SERVER_COMPARISON_DATA, 'graph7');
+    renderHorizontalBarChart(SERVER_COMPARISON_DATA, 'graph7');
     renderLegend(SERVER_COMPARISON_DATA, 'legend7');
   </script>
 </body>
