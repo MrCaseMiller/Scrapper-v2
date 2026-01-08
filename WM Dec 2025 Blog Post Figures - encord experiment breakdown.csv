@@ -1,0 +1,16 @@
+Model,Group,Accepted,Total,Acceptance (%)
+M0,In_distribution,154,499,30.86172
+M1,In_distribution,276,498,55.42169
+M2,In_distribution,186,494,37.65182
+M3,In_distribution,254,498,51.00402
+M4,In_distribution,310,500,62
+M0,New_tasks,270,499,54.10822
+M1,New_tasks,322,491,65.58045
+M2,New_tasks,310,492,63.00813
+M3,New_tasks,360,496,72.58065
+M4,New_tasks,318,494,64.37247
+M0,T2I,192,497,38.63179
+M1,T2I,260,498,52.20884
+M2,T2I,262,494,53.03644
+M3,T2I,283,500,56.6
+M4,T2I,231,496,46.57258
