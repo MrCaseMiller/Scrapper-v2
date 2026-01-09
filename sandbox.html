@@ -119,18 +119,6 @@
     }
     .placeholder-title { font-weight: 600; margin-bottom: 8px; }
 
-    .export-btn {
-      font-family: inherit;
-      font-size: 10px;
-      padding: 6px 12px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: var(--bg);
-      cursor: pointer;
-      border-radius: var(--radius-sm);
-      transition: background 0.2s;
-    }
-    .export-btn:hover { background: rgba(255,255,255,0.3); }
   </style>
 </head>
 <body>
@@ -148,7 +136,6 @@
             <span class="title">Standard vs Ablation Studies</span>
             <span class="subtitle"> — Bernoulli ±1 SE</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph1')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph1"></div>
         <div class="legend" id="legend1"></div>
@@ -163,7 +150,6 @@
             <span class="title">Ablation Delta Performance vs Standard</span>
             <span class="subtitle"> — ±1 SE</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph2')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph2"></div>
         <div class="legend" id="legend2"></div>
@@ -178,7 +164,6 @@
             <span class="title">Standard Model Success Rate by Task</span>
             <span class="subtitle"> — ±1 SE</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph3')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph3"></div>
         <div class="legend" id="legend3"></div>
@@ -193,7 +178,6 @@
             <span class="title">Encord Experiment Breakdown</span>
             <span class="subtitle"> — Acceptance Rate by Group</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph4')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph4"></div>
         <div class="legend" id="legend4"></div>
@@ -208,7 +192,6 @@
             <span class="title">Encord Summary</span>
             <span class="subtitle"> — Overall Acceptance Rate by Model</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph5')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph5"></div>
         <div class="legend" id="legend5"></div>
@@ -223,7 +206,6 @@
             <span class="title">Data Mix by Action</span>
             <span class="subtitle"> — Segment Percentage</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph6')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph6"></div>
         <div class="legend" id="legend6"></div>
@@ -238,7 +220,6 @@
             <span class="title">Success Rate for the Pull-Tissue Task</span>
             <span class="subtitle"> — Between 1 Server and 8 (Multi-Server) Selection</span>
           </div>
-          <button class="export-btn" onclick="exportSvg('graph7')">EXPORT SVG</button>
         </div>
         <div class="graph-body" id="graph7"></div>
         <div class="legend" id="legend7"></div>
@@ -818,8 +799,6 @@
         currentAngle = endAngle;
       });
 
-      // Center label
-      svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" fill="rgba(65,62,62,0.6)" font-family="monospace" font-size="10">${toTitleCase(data.yAxisLabel)}</text>`;
 
       svg += '</svg>';
 
