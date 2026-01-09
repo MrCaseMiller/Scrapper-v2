@@ -389,7 +389,7 @@
     // ═══════════════════════════════════════════════════════════════════════
     const ENCORD_BREAKDOWN_DATA = {
       title: 'Encord Experiment Breakdown',
-      yAxisLabel: 'Acceptance Rate',
+      yAxisLabel: 'Acceptance Rate (%)',
       clusters: [
         { id: 'in_distribution', name: 'In Distribution', points: [
           { label: 'M0', value: 30.86 },
@@ -498,7 +498,7 @@
     // ═══════════════════════════════════════════════════════════════════════
     // BAR CHART RENDERER
     // ═══════════════════════════════════════════════════════════════════════
-    function renderBarChart(data, containerId) {
+    function renderBarChart(data, containerId, tooltipFn = showTooltip, showPercent = false) {
       const { width, height, padding } = CONFIG;
       const clusters = data.clusters;
       const chartW = width - padding.left - padding.right;
@@ -521,9 +521,10 @@
       // Grid lines and Y-axis labels
       for (let i = 0; i <= 10; i++) {
         const y = padding.top + (i / 10) * chartH;
-        const val = (100 - (i / 10) * 100) / 100;
+        const val = 100 - (i / 10) * 100;
+        const label = showPercent ? `${val.toFixed(0)}%` : (val / 100).toFixed(1);
         svg += `<line x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}" stroke="#e0e0e0" stroke-width="0.5"/>`;
-        svg += `<text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" fill="rgba(65,62,62,0.5)" font-family="monospace" font-size="9">${val.toFixed(1)}</text>`;
+        svg += `<text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" fill="rgba(65,62,62,0.5)" font-family="monospace" font-size="9">${label}</text>`;
       }
 
       // Hit areas and Bars
@@ -558,7 +559,7 @@
 
       // Attach event listeners to hit areas
       document.querySelectorAll(`#${containerId} .hit-area`).forEach(area => {
-        area.addEventListener('mouseenter', (e) => showTooltip(e, data));
+        area.addEventListener('mouseenter', (e) => tooltipFn(e, data));
         area.addEventListener('mousemove', moveTooltip);
         area.addEventListener('mouseleave', hideTooltip);
       });
@@ -828,6 +829,19 @@
       document.getElementById('tooltip').classList.add('visible');
     }
 
+    function showPercentageTooltip(e, data) {
+      const clusterId = e.target.getAttribute('data-cluster');
+      const cluster = data.clusters.find(c => c.id === clusterId);
+      if (!cluster) return;
+
+      document.getElementById('tooltipHeader').textContent = cluster.name;
+      document.getElementById('tooltipBody').innerHTML = cluster.points.map((pt, i) =>
+        `<div class="tooltip-row"><span><div class="tooltip-swatch" style="background:${COLORS[i % COLORS.length]}"></div>${pt.label}</span><strong>${pt.value.toFixed(2)}%</strong></div>`
+      ).join('');
+
+      document.getElementById('tooltip').classList.add('visible');
+    }
+
     function showSingleTooltip(e, data) {
       const clusterId = e.target.getAttribute('data-cluster');
       const cluster = data.clusters.find(c => c.id === clusterId);
@@ -866,7 +880,7 @@
     renderSingleBarChart(STANDARD_DATA, 'graph3');
     renderLegend(STANDARD_DATA, 'legend3');
 
-    renderBarChart(ENCORD_BREAKDOWN_DATA, 'graph4');
+    renderBarChart(ENCORD_BREAKDOWN_DATA, 'graph4', showPercentageTooltip, true);
     renderLegend(ENCORD_BREAKDOWN_DATA, 'legend4');
 
     renderSingleBarChart(ENCORD_SUMMARY_DATA, 'graph5');
