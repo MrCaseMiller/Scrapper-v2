@@ -6,7 +6,7 @@ figma.showUI(__html__, { width: 420, height: 520 });
 // Load fonts once at startup
 async function loadFonts() {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-  await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
+  await figma.loadFontAsync({ family: "Inter", style: "SemiBold" });
 }
 
 // Listen for messages from UI
@@ -299,14 +299,20 @@ function createTableCell(columnName, value, width, isHeader, isFirst) {
     cell.strokeBottomWeight = 0;
   }
 
-  // Create text node with wrapping
+  // Create text node
   var text = figma.createText();
+
+  // Set font first (required before setting characters)
   text.fontName = isHeader
-    ? { family: "Inter", style: "Semi Bold" }
+    ? { family: "Inter", style: "SemiBold" }
     : { family: "Inter", style: "Regular" };
+
+  // Set text content
+  text.characters = String(value) || "-";
+
+  // Set text styling
   text.fontSize = 13;
   text.lineHeight = { value: 20, unit: "PIXELS" };
-  text.characters = String(value);
   text.fills = [{
     type: 'SOLID',
     color: isHeader
@@ -314,9 +320,10 @@ function createTableCell(columnName, value, width, isHeader, isFirst) {
       : { r: 0.2, g: 0.2, b: 0.2 }
   }];
 
+  // Add to cell first
   cell.appendChild(text);
 
-  // Enable text wrapping
+  // Then enable text wrapping (must be after appendChild for auto-layout)
   text.layoutSizingHorizontal = "FILL";
   text.textAutoResize = "HEIGHT";
 
