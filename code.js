@@ -278,17 +278,16 @@ function createTableRow(columns, values, colWidths, isHeader, isLast) {
 function createTableCell(columnName, value, width, isHeader, isFirst) {
   var cell = figma.createFrame();
   cell.name = columnName;
-  cell.layoutMode = "HORIZONTAL";
-  cell.counterAxisAlignItems = "CENTER";
-  cell.primaryAxisSizingMode = "FIXED";
-  cell.counterAxisSizingMode = "AUTO";
+  cell.layoutMode = "VERTICAL";
+  cell.primaryAxisSizingMode = "AUTO";
+  cell.counterAxisSizingMode = "FIXED";
   cell.resize(width, 40);
   cell.paddingLeft = 12;
   cell.paddingRight = 12;
   cell.paddingTop = 12;
   cell.paddingBottom = 12;
   cell.fills = [];
-  cell.clipsContent = true;
+  cell.clipsContent = false;
 
   // Add left border for non-first cells
   if (!isFirst) {
@@ -322,8 +321,8 @@ function createTableCell(columnName, value, width, isHeader, isFirst) {
 
   // Add to cell FIRST, then set layout properties
   cell.appendChild(text);
-  text.textTruncation = "ENDING";
   text.layoutSizingHorizontal = "FILL";
+  text.textAutoResize = "HEIGHT";
 
   return cell;
 }
