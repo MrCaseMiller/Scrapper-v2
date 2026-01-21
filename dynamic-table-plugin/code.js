@@ -6,7 +6,7 @@ figma.showUI(__html__, { width: 420, height: 520 });
 // Load fonts once at startup
 async function loadFonts() {
   await figma.loadFontAsync({ family: "Inter", style: "Regular" });
-  await figma.loadFontAsync({ family: "Inter", style: "SemiBold" });
+  await figma.loadFontAsync({ family: "Inter", style: "Semi Bold" });
 }
 
 // Listen for messages from UI
@@ -278,15 +278,17 @@ function createTableRow(columns, values, colWidths, isHeader, isLast) {
 function createTableCell(columnName, value, width, isHeader, isFirst) {
   var cell = figma.createFrame();
   cell.name = columnName;
-  cell.layoutMode = "VERTICAL";
-  cell.primaryAxisSizingMode = "AUTO";
-  cell.counterAxisSizingMode = "FIXED";
-  cell.resize(width, 10);
-  cell.paddingLeft = 16;
-  cell.paddingRight = 16;
-  cell.paddingTop = 14;
-  cell.paddingBottom = 14;
+  cell.layoutMode = "HORIZONTAL";
+  cell.counterAxisAlignItems = "CENTER";
+  cell.primaryAxisSizingMode = "FIXED";
+  cell.counterAxisSizingMode = "AUTO";
+  cell.resize(width, 40);
+  cell.paddingLeft = 12;
+  cell.paddingRight = 12;
+  cell.paddingTop = 12;
+  cell.paddingBottom = 12;
   cell.fills = [];
+  cell.clipsContent = true;
 
   // Add left border for non-first cells
   if (!isFirst) {
@@ -299,33 +301,29 @@ function createTableCell(columnName, value, width, isHeader, isFirst) {
     cell.strokeBottomWeight = 0;
   }
 
+  // Get display value - ensure it's never empty
+  var displayValue = (value !== null && value !== undefined && value !== '')
+    ? String(value)
+    : '-';
+
   // Create text node
   var text = figma.createText();
-
-  // Set font first (required before setting characters)
   text.fontName = isHeader
-    ? { family: "Inter", style: "SemiBold" }
+    ? { family: "Inter", style: "Semi Bold" }
     : { family: "Inter", style: "Regular" };
-
-  // Set text content
-  text.characters = String(value) || "-";
-
-  // Set text styling
   text.fontSize = 13;
-  text.lineHeight = { value: 20, unit: "PIXELS" };
+  text.characters = displayValue;
   text.fills = [{
     type: 'SOLID',
     color: isHeader
-      ? { r: 0.25, g: 0.25, b: 0.25 }
+      ? { r: 0.3, g: 0.3, b: 0.3 }
       : { r: 0.2, g: 0.2, b: 0.2 }
   }];
 
-  // Add to cell first
+  // Add to cell FIRST, then set layout properties
   cell.appendChild(text);
-
-  // Then enable text wrapping (must be after appendChild for auto-layout)
+  text.textTruncation = "ENDING";
   text.layoutSizingHorizontal = "FILL";
-  text.textAutoResize = "HEIGHT";
 
   return cell;
 }
