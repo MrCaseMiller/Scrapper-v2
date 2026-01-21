@@ -281,6 +281,7 @@ function createTableCell(columnName, value, width, isHeader, isFirst) {
   cell.layoutMode = "VERTICAL";
   cell.primaryAxisSizingMode = "AUTO";
   cell.counterAxisSizingMode = "FIXED";
+  cell.layoutAlign = "STRETCH";
   cell.resize(width, 40);
   cell.paddingLeft = 12;
   cell.paddingRight = 12;
