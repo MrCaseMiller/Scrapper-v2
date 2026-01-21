@@ -143,6 +143,7 @@ function createDynamicTable(items, options) {
   var maxWidth = options.maxWidth || 1600;
   var minColWidth = options.minColWidth || 120;
   var maxColWidth = options.maxColWidth || 280;
+  var tableName = options.tableName || 'Dynamic Table';
 
   // Flatten items if needed
   var flatItems = items.map(function(item) {
@@ -200,7 +201,7 @@ function createDynamicTable(items, options) {
 
   // Create main container
   var container = figma.createFrame();
-  container.name = "Dynamic Table";
+  container.name = tableName;
   container.layoutMode = "VERTICAL";
   container.itemSpacing = 0;
   container.primaryAxisSizingMode = "AUTO";

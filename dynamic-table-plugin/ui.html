@@ -238,6 +238,11 @@
   <p class="subtitle">Paste JSON data to create adaptive tables</p>
 
   <div class="section">
+    <label>Table Name</label>
+    <input type="text" id="tableName" placeholder="My Table" style="width: 100%; padding: 8px 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px;">
+  </div>
+
+  <div class="section">
     <label>JSON Data</label>
     <textarea id="jsonInput" placeholder='{
   "items": [
@@ -495,10 +500,12 @@
 
       try {
         var data = JSON.parse(jsonInput);
+        var tableName = document.getElementById('tableName').value.trim() || 'Dynamic Table';
         var options = {
           maxDepth: parseInt(document.getElementById('flattenDepth').value) || 1,
           maxColWidth: parseInt(document.getElementById('maxColWidth').value) || 300,
-          columns: getSelectedColumns()
+          columns: getSelectedColumns(),
+          tableName: tableName
         };
 
         parent.postMessage({
