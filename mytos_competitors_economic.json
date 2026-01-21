@@ -1,0 +1,360 @@
+{
+  "meta": {
+    "title": "Cell & Gene Therapy Manufacturing Competitive Analysis",
+    "generated": "January 2026",
+    "focus": "Economic Data, Facilities & Equipment",
+    "market_size": {
+      "cgt_cdmo_2024": "$7.52B",
+      "cgt_cdmo_2034_projected": "$88.84B",
+      "cagr": "28.1%"
+    },
+    "cell_therapy_market": {
+      "2023_value": "$4.8B",
+      "2030_projected_cagr": "37%"
+    }
+  },
+  "competitors": [
+    {
+      "company": "Mytos",
+      "type": "Automated CDMO",
+      "headquarters": "London, UK",
+      "founded": "2020",
+      "financials": {
+        "total_funding": "$24M+",
+        "latest_round": "Series A - $19M (Nov 2023)",
+        "lead_investors": "Wing Venture Capital, IQ Capital, Buckley Ventures",
+        "revenue": "Pre-revenue (commercial target 2026)",
+        "valuation": "Not disclosed"
+      },
+      "facilities": {
+        "primary_site": "CGT Catapult Stevenage Manufacturing Innovation Centre, UK",
+        "facility_size": "Within 82,900 sq ft campus (7,700m²)",
+        "cleanroom_modules": "Access to 12 GMP modules at CGT Catapult",
+        "expansion_plans": "Multiple global sites planned"
+      },
+      "equipment": {
+        "core_technology": "iDEM™ automation platform",
+        "annual_capacity": "1,500 autologous doses OR 25,000 allogeneic doses",
+        "bioreactor_capability": "Scalable cell culture automation",
+        "key_differentiator": "Same flask format as manual culture for easy tech transfer"
+      },
+      "partnerships": {
+        "manufacturing_partner": "CGT Catapult",
+        "clinical_readiness_target": "September 2026",
+        "patient_batches_at_site": "200+ batches released by CGT Catapult partners"
+      },
+      "strategic_positioning": "Biology-preserving automation for stem cell-derived therapies"
+    },
+    {
+      "company": "Cellares",
+      "type": "IDMO (Integrated Development & Manufacturing Organization)",
+      "headquarters": "South San Francisco, CA",
+      "founded": "2019",
+      "financials": {
+        "total_funding": "$355M",
+        "latest_round": "Series C - $255M (Aug 2023)",
+        "lead_investors": "Koch Disruptive Technologies, Bristol-Myers Squibb, DFJ Growth",
+        "revenue": "$82M (2025 estimate)",
+        "valuation": "Not publicly disclosed",
+        "major_deal": "$380M BMS partnership (2024)"
+      },
+      "facilities": {
+        "sf_smart_factory": "South San Francisco, CA - Operational",
+        "nj_smart_factory": "Bridgewater, NJ - 40,000 batch/year capacity",
+        "europe_expansion": "Planned",
+        "japan_expansion": "Planned via BMS partnership"
+      },
+      "equipment": {
+        "core_technology": "Cell Shuttle platform",
+        "annual_capacity": "40,000 cell therapy batches (10x traditional CDMO)",
+        "automation_level": "End-to-end walk-away automation",
+        "modalities_supported": "CAR-T, TCR, other cell therapies"
+      },
+      "partnerships": {
+        "key_partners": ["Bristol-Myers Squibb", "Kite/Gilead (evaluation)", "Sony (flow cytometry)"],
+        "ipo_preparation": "Appointed CCO Dec 2025 for IPO readiness"
+      },
+      "strategic_positioning": "High-throughput industrial-scale cell therapy manufacturing"
+    },
+    {
+      "company": "Ori Biotech",
+      "type": "Platform Developer / CDMO",
+      "headquarters": "London, UK & New Jersey, USA",
+      "founded": "2015",
+      "financials": {
+        "total_funding": "$281M",
+        "latest_round": "Series B - $139M (Jun 2022)",
+        "lead_investors": "Novalis LifeSciences, Puhua Capital, Chimera Abu Dhabi",
+        "revenue": "£474K (Dec 2024)",
+        "valuation": "£3.24B (Jun 2022)"
+      },
+      "facilities": {
+        "primary_locations": "London, UK and New Jersey, USA",
+        "development_labs": "State-of-the-art CGT development facilities",
+        "manufacturing_capability": "R&D to GMP scale (~1,000 doses)"
+      },
+      "equipment": {
+        "core_technology": "IRO Platform",
+        "features": "Modular, stackable, flexible CGT manufacturing system",
+        "bioreactor_design": "Novel bioreactor with automated sterile connection (Ori Connect)",
+        "scalability": "Preclinical to commercial manufacturing"
+      },
+      "partnerships": {
+        "key_partners": ["Fresenius Kabi (Dec 2024)", "CTMC", "Leading CDMOs"],
+        "fda_designation": "Advanced Manufacturing Designation received",
+        "first_deliveries": "IRO deliveries to CDMOs and commercial manufacturers (Jan 2025)"
+      },
+      "strategic_positioning": "Next-generation automated CGT manufacturing platform"
+    },
+    {
+      "company": "Lonza",
+      "type": "Full-service CDMO (Public: SWX: LONN)",
+      "headquarters": "Basel, Switzerland",
+      "founded": "1897",
+      "financials": {
+        "revenue_2024": "CHF 6.6B (~$7.4B USD)",
+        "core_ebitda_2024": "CHF 1.9B (29% margin)",
+        "cgt_revenue_growth_2024": "1.1% CER",
+        "capex_2024": "CHF 1.4B (22% of sales)",
+        "major_acquisition": "Genentech Vacaville facility - $1.2B (Oct 2024)",
+        "market_cap": "~$40B+"
+      },
+      "facilities": {
+        "houston_tx": {
+          "size": "300,000 sq ft (27,870m²)",
+          "status": "World's largest dedicated CGT facility at 2018 opening",
+          "capability": "FDA-approved commercial manufacture",
+          "capacity": "200+ clinical and commercial viral vector batches annually"
+        },
+        "portsmouth_nh": {
+          "size": "130,000+ sq ft (new Vertex facility)",
+          "status": "Co-investment with Vertex",
+          "capability": "Type 1 diabetes cell therapy portfolio"
+        },
+        "geleen_nl": {
+          "capability": "cGMP cell therapy + mRNA/LNP complex",
+          "status": "FDA, EMA, MHRA GMP licensed",
+          "products": "CASGEVY® manufacturing"
+        },
+        "vacaville_ca": {
+          "status": "Acquired Oct 2024",
+          "planned_investment": "CHF 500M upgrade",
+          "capability": "Large-scale mammalian biologics"
+        },
+        "global_network": "30+ sites across Switzerland, US, UK, Belgium, Spain, France, Mexico, Brazil, Japan, India, China, Singapore"
+      },
+      "equipment": {
+        "viral_vector_scale": "50L to 2,000L suspension-based processes",
+        "bioreactor_capacity": "Up to 250L process development, 2,000L cGMP",
+        "cell_therapy_suites": "Multiple parallel GMP trains with independent air handling",
+        "technology": "Single-use/disposable systems, MODA-ES® digital platform",
+        "cocoon_platform": "Automated cell therapy manufacturing system"
+      },
+      "partnerships": {
+        "key_clients": ["Vertex (CASGEVY®)", "Cabaletta Bio", "Acumen Pharmaceuticals"],
+        "customers_served": "160+ CGT customers",
+        "phase_iii_commercial_projects": "15+"
+      },
+      "strategic_positioning": "Global scale enterprise CDMO with integrated end-to-end services"
+    },
+    {
+      "company": "Catalent (Novo Holdings)",
+      "type": "Full-service CDMO (Now Private)",
+      "headquarters": "Somerset, NJ",
+      "founded": "2007 (spun from Cardinal Health)",
+      "financials": {
+        "acquisition_value": "$16.5B enterprise value (Dec 2024)",
+        "acquirer": "Novo Holdings",
+        "share_price": "$63.50/share (47.5% premium)",
+        "fy2024_revenue": "~$4.4B",
+        "sites_sold_to_novo_nordisk": "$11B (3 fill-finish sites)",
+        "employees": "~17,000"
+      },
+      "facilities": {
+        "global_sites": "50+ manufacturing facilities worldwide",
+        "sites_divested": {
+          "anagni_italy": "Fill-finish → Novo Nordisk",
+          "bloomington_indiana": "Fill-finish → Novo Nordisk",
+          "brussels_belgium": "Fill-finish → Novo Nordisk"
+        },
+        "cgt_capabilities": "Gene therapy manufacturing (largest GT CDMO globally)",
+        "remaining_operations": "Independent CDMO under Novo Holdings"
+      },
+      "equipment": {
+        "capability": "Sterile fill-finish, biologics, small molecule, gene therapy",
+        "annual_doses": "~70 billion doses of ~8,000 products",
+        "modalities": "Cell therapy, gene therapy, viral vectors"
+      },
+      "partnerships": {
+        "key_relationships": ["Novartis", "Sarepta", "Multiple pharma/biotech"],
+        "commercial_experience": "Commercial gene therapy manufacturing"
+      },
+      "strategic_positioning": "Integrated services from development to commercial supply"
+    },
+    {
+      "company": "Thermo Fisher Scientific",
+      "type": "Equipment + CDMO Services (Public: NYSE: TMO)",
+      "headquarters": "Waltham, MA",
+      "founded": "2006 (merger)",
+      "financials": {
+        "annual_revenue": "$40B+ (company-wide)",
+        "brammer_bio_acquisition": "$1.7B (2019)",
+        "henogen_acquisition": "€725M (~$850M) (Jan 2021)",
+        "market_cap": "~$200B+",
+        "cgt_network_sites": "15+ locations globally"
+      },
+      "facilities": {
+        "alachua_fl": {
+          "size": "80,000 sq ft",
+          "capability": "Early clinical campus - process dev, Phase I/II manufacturing"
+        },
+        "cambridge_ma": {
+          "capability": "4 drug substance suites + drug product suite",
+          "scale": "Up to 2,000L late-stage and commercial"
+        },
+        "lexington_ma": {
+          "size": "50,000 sq ft (2016 purchase from Biogen)",
+          "capability": "Commercial-ready cGMP viral vector manufacturing"
+        },
+        "san_francisco_ucsf": {
+          "capability": "Cell therapy development and manufacturing",
+          "partnership": "UC San Francisco collaboration"
+        },
+        "philadelphia_atxcc": {
+          "size": "Within 53,000 sq ft BioLabs incubator",
+          "status": "East Coast collaboration center (Nov 2025)",
+          "purpose": "Early-stage CGT developer support"
+        },
+        "carlsbad_ca_atxcc": {
+          "size": "6,000 sq ft",
+          "status": "First US collaboration center (Apr 2025)"
+        }
+      },
+      "equipment": {
+        "viral_vector_suites": "27 drug substance suites, 4 drug product lines",
+        "manufacturing_scale": "Up to 2,000L",
+        "platforms": "Slipstream™ closed semi-automated manufacturing",
+        "technologies": "Bioprocessing, cell culture, single-use systems"
+      },
+      "partnerships": {
+        "strategic_partnerships": ["Moderna (15-year agreement)", "Torque Therapeutics"],
+        "acquisitions_driving_cgt": ["Brammer Bio", "Henogen (Belgium)"]
+      },
+      "strategic_positioning": "Integrated equipment supplier and CDMO services"
+    },
+    {
+      "company": "WuXi Advanced Therapies (Altaris)",
+      "type": "CTDMO (Being acquired by Altaris)",
+      "headquarters": "Philadelphia, PA (US operations)",
+      "founded": "2004 (as part of WuXi AppTec)",
+      "financials": {
+        "parent_revenue_2024": "RMB 39.2B (~$5.4B) - WuXi AppTec total",
+        "atu_revenue_decline": "-17% YTD 2024 (due to BIOSECURE Act)",
+        "sale_status": "Sold to Altaris (Dec 2024, closing H1 2025)",
+        "sale_price": "Undisclosed",
+        "biosecure_impact": "Insufficient new US business wins"
+      },
+      "facilities": {
+        "philadelphia_navy_yard": {
+          "total_capacity": "220,000 sq ft across multiple buildings",
+          "cc3_facility": "55,000 sq ft commercial non-viral cell therapy",
+          "original_facility": "20,000 sq ft cGMP cell therapy",
+          "expansion_facility": "50,000 sq ft allogeneic/autologous commercial"
+        },
+        "uk_operations": "Included in Altaris sale",
+        "global_presence": "5 facilities in US and UK"
+      },
+      "equipment": {
+        "capabilities": "Viral vector, cell therapy, CAR-T, analytical testing",
+        "scale": "Clinical to commercial manufacturing",
+        "services": "End-to-end CTDMO platform"
+      },
+      "partnerships": {
+        "key_client": "Iovance Biotherapeutics (AMTAGVI™ - first FDA-approved TIL therapy)",
+        "fda_approval": "First external US manufacturing site for commercial individualized T cell therapy",
+        "regulatory_status": "Impacted by BIOSECURE Act proceedings"
+      },
+      "strategic_positioning": "Transitioning ownership; proven commercial CGT manufacturing track record"
+    },
+    {
+      "company": "FUJIFILM Diosynth Biotechnologies",
+      "type": "Biologics & CGT CDMO",
+      "headquarters": "Hillerød, Denmark (Global HQ)",
+      "founded": "1990s (as Diosynth); Fujifilm acquired 2011+",
+      "financials": {
+        "parent_investment": "$8B+ since 2011",
+        "holly_springs_investment": "$3.2B total",
+        "latest_expansion": "$1.2B (Apr 2024)",
+        "atara_acquisition": "$100M (Jan 2022)",
+        "cell_therapy_investment": "$200M package (Dec 2023)",
+        "revenue_target": "$1.8B+ CDMO revenue"
+      },
+      "facilities": {
+        "holly_springs_nc": {
+          "investment": "$3.2B+",
+          "bioreactors": "16 x 20,000L mammalian cell culture (by 2028)",
+          "jobs": "1,400 new positions",
+          "status": "First phase operations 2025",
+          "capability": "End-to-end biomanufacturing"
+        },
+        "hillerod_denmark": {
+          "investment": "$1.6B expansion",
+          "bioreactors": "12 mammalian cell bioreactors (6 new added Nov 2024)",
+          "expansion": "8 additional bioreactors + 2 downstream streams by 2026",
+          "technology": "KojoX™ modular production"
+        },
+        "thousand_oaks_ca": {
+          "capability": "Clinical and commercial cell therapies",
+          "expansion": "2 new independent production suites (Nov 2024)",
+          "specialization": "Allogeneic T cell and CAR-T immunotherapies",
+          "ema_status": "GMP Certificate of Compliance"
+        },
+        "billingham_uk": {
+          "capability": "Microbial fermentation",
+          "expansion": "Tripled throughput with 2 x 4,000L fermenters (Aug 2024)"
+        },
+        "college_station_tx": {
+          "investment": "$300M expansion",
+          "status": "Largest single-use CDMO production campus in North America"
+        },
+        "watertown_ma": {
+          "size": "40,000 sq ft",
+          "cleanrooms": "8 clean rooms for cell and viral vector",
+          "partnership": "CABIM consortium"
+        }
+      },
+      "equipment": {
+        "large_scale_bioreactors": "20,000L mammalian cell culture",
+        "fermenters": "4,000L microbial",
+        "technology_platforms": "KojoX™ modular, pAVEway™ microbial, Apollo™X cell line",
+        "single_use_systems": "Extensive deployment"
+      },
+      "partnerships": {
+        "key_clients": ["Atara Biotherapeutics (Ebvallo™)", "Major pharma"],
+        "consortium": "CABIM (industry-academia R&D)"
+      },
+      "strategic_positioning": "Fast-growing mid-to-enterprise scale biologics and CGT CDMO"
+    }
+  ],
+  "market_context": {
+    "key_trends_2024_2025": [
+      "Novo Holdings' $16.5B Catalent acquisition reshapes CDMO landscape",
+      "BIOSECURE Act driving WuXi divestitures and supply chain reorganization",
+      "Automation platforms gaining traction (Cellares Cell Shuttle, Mytos iDEM, Ori IRO)",
+      "9 FDA cell therapy approvals in 2024",
+      "CGT CDMO market expected to grow 12% annually next 5 years",
+      "Venture capital stabilizing to pre-pandemic levels for late-stage CGT"
+    ],
+    "capacity_benchmarks": {
+      "traditional_cdmo": "~4,000 batches/year",
+      "cellares_smart_factory": "40,000 batches/year (10x improvement)",
+      "lonza_houston": "200+ viral vector batches/year"
+    },
+    "facility_size_benchmarks": {
+      "largest_dedicated_cgt": "Lonza Houston - 300,000 sq ft",
+      "enterprise_scale": "100,000+ sq ft",
+      "mid_scale": "50,000-100,000 sq ft",
+      "clinical_scale": "20,000-50,000 sq ft"
+    }
+  }
+}
