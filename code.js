@@ -138,11 +138,11 @@ function estimateTextWidth(text, fontSize) {
 // ============================================
 function createDynamicTable(items, options) {
   var flatten = options.flatten !== false;
-  var maxDepth = options.maxDepth || 1;
+  var maxDepth = options.maxDepth || 2;
   var selectedColumns = options.columns || null;
-  var maxWidth = options.maxWidth || 1400;
-  var minColWidth = options.minColWidth || 100;
-  var maxColWidth = options.maxColWidth || 300;
+  var maxWidth = options.maxWidth || 1600;
+  var minColWidth = options.minColWidth || 120;
+  var maxColWidth = options.maxColWidth || 280;
 
   // Flatten items if needed
   var flatItems = items.map(function(item) {
