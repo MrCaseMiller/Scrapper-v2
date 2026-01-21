@@ -7,404 +7,524 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       font-family: Inter, system-ui, -apple-system, sans-serif;
       font-size: 12px;
       color: #333;
-      padding: 16px;
+      padding: 20px;
       background: #fff;
     }
-    
+
     h2 {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 4px;
       color: #1a1a1a;
     }
-    
+
+    .subtitle {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
     .section {
       margin-bottom: 16px;
     }
-    
+
     label {
       display: block;
       font-size: 11px;
       font-weight: 500;
       color: #666;
       margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
-    
+
     textarea {
       width: 100%;
-      height: 140px;
-      padding: 10px;
+      height: 160px;
+      padding: 12px;
       border: 1px solid #e0e0e0;
-      border-radius: 6px;
+      border-radius: 8px;
       font-family: 'SF Mono', Monaco, Consolas, monospace;
       font-size: 11px;
       line-height: 1.5;
       resize: vertical;
       background: #fafafa;
     }
-    
+
     textarea:focus {
       outline: none;
       border-color: #18a0fb;
       background: #fff;
     }
-    
-    .template-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    
-    .template-btn {
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      background: #fff;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
-    }
-    
-    .template-btn:hover {
-      border-color: #18a0fb;
-      background: #f5faff;
-    }
-    
-    .template-btn.active {
-      border-color: #18a0fb;
-      background: #e8f4ff;
-    }
-    
-    .template-btn .icon {
-      font-size: 18px;
-      margin-bottom: 2px;
-    }
-    
-    .template-btn .name {
-      font-size: 11px;
-      font-weight: 500;
-      color: #333;
-    }
-    
-    /* Viewport Toggle */
-    .viewport-toggle {
+
+    .options-row {
       display: flex;
-      gap: 8px;
+      gap: 12px;
     }
-    
-    .viewport-btn {
+
+    .option-group {
       flex: 1;
-      padding: 12px 8px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 8px 10px;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
+      font-size: 12px;
       background: #fff;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
-    }
-    
-    .viewport-btn:hover {
-      border-color: #18a0fb;
-      background: #f5faff;
-    }
-    
-    .viewport-btn.active {
-      border-color: #18a0fb;
-      background: #e8f4ff;
-    }
-    
-    .viewport-btn .icon {
-      font-size: 20px;
-      margin-bottom: 4px;
-    }
-    
-    .viewport-btn .name {
-      font-size: 11px;
-      font-weight: 600;
       color: #333;
     }
-    
-    .viewport-btn .size {
-      font-size: 10px;
-      color: #888;
-      margin-top: 2px;
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: #18a0fb;
     }
-    
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      margin: 0;
+      font-size: 12px;
+      color: #333;
+      cursor: pointer;
+    }
+
     .btn-row {
       display: flex;
-      gap: 8px;
-      margin-top: 16px;
+      gap: 10px;
+      margin-top: 20px;
     }
-    
+
     button.primary {
       flex: 1;
-      padding: 10px 16px;
+      padding: 12px 16px;
       background: #18a0fb;
       color: white;
       border: none;
-      border-radius: 6px;
-      font-size: 12px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
       transition: background 0.15s;
     }
-    
+
     button.primary:hover {
       background: #0d8de5;
     }
-    
-    button.primary:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-    
+
     button.secondary {
-      padding: 10px 16px;
+      padding: 12px 16px;
       background: #f5f5f5;
       color: #333;
       border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      font-size: 12px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
     }
-    
+
     button.secondary:hover {
       background: #eee;
     }
-    
+
     .message {
-      padding: 10px;
-      border-radius: 6px;
-      margin-top: 12px;
-      font-size: 11px;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 16px;
+      font-size: 12px;
     }
-    
+
     .message.success {
       background: #e6f9ed;
       color: #1a7f37;
     }
-    
+
     .message.error {
       background: #ffebe9;
       color: #cf222e;
     }
-    
+
     .examples {
-      margin-top: 12px;
-      padding-top: 12px;
+      margin-top: 16px;
+      padding-top: 16px;
       border-top: 1px solid #eee;
     }
-    
-    .examples h3 {
+
+    .examples-label {
       font-size: 11px;
       font-weight: 500;
-      color: #666;
+      color: #888;
       margin-bottom: 8px;
     }
-    
+
+    .example-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
     .example-btn {
-      display: inline-block;
-      padding: 4px 8px;
-      margin: 2px;
+      padding: 6px 12px;
       background: #f5f5f5;
       border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      font-size: 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .example-btn:hover {
+      background: #e8f4ff;
+      border-color: #18a0fb;
+      color: #18a0fb;
+    }
+
+    .column-selector {
+      max-height: 120px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 8px;
+      background: #fafafa;
+      display: none;
+    }
+
+    .column-selector.visible {
+      display: block;
+    }
+
+    .column-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 0;
+    }
+
+    .column-item input {
       cursor: pointer;
     }
-    
-    .example-btn:hover {
-      background: #eee;
+
+    .column-item label {
+      margin: 0;
+      font-size: 11px;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .info-text {
+      font-size: 10px;
+      color: #888;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
-  <h2>JSON Design Generator</h2>
-  
+  <h2>Dynamic Table Generator</h2>
+  <p class="subtitle">Paste JSON data to create adaptive tables</p>
+
   <div class="section">
-    <label>Paste JSON Data</label>
+    <label>JSON Data</label>
     <textarea id="jsonInput" placeholder='{
-  "products": [
-    { "name": "Product", "price": "$99" },
-    { "name": "Another", "price": "$149" }
+  "items": [
+    { "name": "Item 1", "value": "100" },
+    { "name": "Item 2", "value": "200" }
   ]
 }'></textarea>
   </div>
-  
+
   <div class="section">
-    <label>Template</label>
-    <div class="template-grid">
-      <div class="template-btn active" data-template="auto">
-        <div class="icon">✨</div>
-        <div class="name">Auto Detect</div>
+    <div class="options-row">
+      <div class="option-group">
+        <label>Flatten Depth</label>
+        <select id="flattenDepth">
+          <option value="0">No flattening</option>
+          <option value="1" selected>1 level (recommended)</option>
+          <option value="2">2 levels</option>
+          <option value="3">3 levels</option>
+        </select>
+        <p class="info-text">How deep to flatten nested objects</p>
       </div>
-      <div class="template-btn" data-template="cards">
-        <div class="icon">▦</div>
-        <div class="name">Cards Grid</div>
-      </div>
-      <div class="template-btn" data-template="list">
-        <div class="icon">☰</div>
-        <div class="name">List</div>
-      </div>
-      <div class="template-btn" data-template="table">
-        <div class="icon">▤</div>
-        <div class="name">Table</div>
+      <div class="option-group">
+        <label>Max Column Width</label>
+        <select id="maxColWidth">
+          <option value="200">200px (compact)</option>
+          <option value="300" selected>300px (standard)</option>
+          <option value="400">400px (wide)</option>
+          <option value="500">500px (extra wide)</option>
+        </select>
       </div>
     </div>
   </div>
-  
-  <div class="section">
-    <label>Viewport Size</label>
-    <div class="viewport-toggle">
-      <div class="viewport-btn active" data-viewport="desktop">
-        <div class="icon">🖥️</div>
-        <div class="name">Desktop</div>
-        <div class="size">1200px</div>
-      </div>
-      <div class="viewport-btn" data-viewport="mobile">
-        <div class="icon">📱</div>
-        <div class="name">Mobile</div>
-        <div class="size">375px</div>
-      </div>
-      <div class="viewport-btn" data-viewport="both">
-        <div class="icon">🖥️📱</div>
-        <div class="name">Both</div>
-        <div class="size">Side by side</div>
-      </div>
-    </div>
+
+  <div class="section" id="columnSection" style="display: none;">
+    <label>Select Columns (optional)</label>
+    <div class="column-selector" id="columnSelector"></div>
+    <p class="info-text">Leave unchecked to include all columns</p>
   </div>
-  
+
   <div class="btn-row">
-    <button class="primary" id="generateBtn">Generate Design</button>
+    <button class="primary" id="generateBtn">Generate Table</button>
     <button class="secondary" id="cancelBtn">Close</button>
   </div>
-  
+
   <div id="messageArea"></div>
-  
+
   <div class="examples">
-    <h3>Load Example</h3>
-    <span class="example-btn" data-example="products">Products</span>
-    <span class="example-btn" data-example="users">Users</span>
-    <span class="example-btn" data-example="tasks">Tasks</span>
-    <span class="example-btn" data-example="pricing">Pricing</span>
+    <div class="examples-label">Load Example Data</div>
+    <div class="example-pills">
+      <span class="example-btn" data-example="simple">Simple List</span>
+      <span class="example-btn" data-example="products">Products</span>
+      <span class="example-btn" data-example="users">Users</span>
+      <span class="example-btn" data-example="nested">Nested Data</span>
+    </div>
   </div>
 
   <script>
-    // State
-    var selectedTemplate = 'auto';
-    var selectedViewport = 'desktop';
-    
-    // Template selection
-    document.querySelectorAll('.template-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.template-btn').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        selectedTemplate = btn.dataset.template;
-      });
-    });
-    
-    // Viewport selection
-    document.querySelectorAll('.viewport-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.viewport-btn').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        selectedViewport = btn.dataset.viewport;
-      });
-    });
-    
-    // Generate button
-    document.getElementById('generateBtn').addEventListener('click', function() {
-      var jsonInput = document.getElementById('jsonInput').value.trim();
-      var messageArea = document.getElementById('messageArea');
-      
-      if (!jsonInput) {
-        messageArea.innerHTML = '<div class="message error">Please paste some JSON data</div>';
-        return;
-      }
-      
-      try {
-        var data = JSON.parse(jsonInput);
-        
-        // Send message based on viewport selection
-        if (selectedViewport === 'both') {
-          // Generate both versions
-          parent.postMessage({ 
-            pluginMessage: { 
-              type: 'generate', 
-              data: data,
-              template: selectedTemplate,
-              viewport: 'both'
-            } 
-          }, '*');
-        } else {
-          parent.postMessage({ 
-            pluginMessage: { 
-              type: 'generate', 
-              data: data,
-              template: selectedTemplate,
-              viewport: selectedViewport
-            } 
-          }, '*');
-        }
-        
-        messageArea.innerHTML = '<div class="message">Generating...</div>';
-      } catch (e) {
-        messageArea.innerHTML = '<div class="message error">Invalid JSON: ' + e.message + '</div>';
-      }
-    });
-    
-    // Cancel button
-    document.getElementById('cancelBtn').addEventListener('click', function() {
-      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
-    });
-    
+    var detectedColumns = [];
+    var selectedColumns = [];
+
     // Example data
     var examples = {
+      simple: [
+        { "name": "Alpha", "status": "Active", "count": 42 },
+        { "name": "Beta", "status": "Pending", "count": 17 },
+        { "name": "Gamma", "status": "Active", "count": 89 },
+        { "name": "Delta", "status": "Inactive", "count": 5 }
+      ],
       products: [
-        { "name": "Wireless Headphones", "price": "$149", "description": "Premium sound quality" },
-        { "name": "Smart Watch", "price": "$299", "description": "Fitness tracking" },
-        { "name": "Bluetooth Speaker", "price": "$79", "description": "Portable design" },
-        { "name": "USB-C Hub", "price": "$59", "description": "7-in-1 connectivity" }
+        { "product": "Wireless Headphones", "category": "Electronics", "price": "$149", "stock": "In Stock", "rating": "4.5/5" },
+        { "product": "Ergonomic Keyboard", "category": "Electronics", "price": "$89", "stock": "Low Stock", "rating": "4.8/5" },
+        { "product": "USB-C Hub", "category": "Accessories", "price": "$59", "stock": "In Stock", "rating": "4.2/5" },
+        { "product": "Monitor Stand", "category": "Accessories", "price": "$79", "stock": "Out of Stock", "rating": "4.6/5" }
       ],
       users: [
-        { "name": "Sarah Chen", "role": "Designer", "status": "Active" },
-        { "name": "Mike Johnson", "role": "Developer", "status": "Active" },
-        { "name": "Emma Wilson", "role": "PM", "status": "Away" },
-        { "name": "Alex Rivera", "role": "Engineer", "status": "Active" }
+        { "name": "Sarah Chen", "email": "sarah@example.com", "role": "Designer", "department": "Product", "status": "Active" },
+        { "name": "Mike Johnson", "email": "mike@example.com", "role": "Developer", "department": "Engineering", "status": "Active" },
+        { "name": "Emma Wilson", "email": "emma@example.com", "role": "PM", "department": "Product", "status": "Away" },
+        { "name": "Alex Rivera", "email": "alex@example.com", "role": "Engineer", "department": "Engineering", "status": "Active" }
       ],
-      tasks: [
-        { "title": "Design review", "description": "Review new homepage mockups", "status": "In Progress" },
-        { "title": "API integration", "description": "Connect payment gateway", "status": "Todo" },
-        { "title": "User testing", "description": "Schedule sessions for next week", "status": "Done" }
-      ],
-      pricing: [
-        { "plan": "Starter", "price": "$9/mo", "users": "1 user", "storage": "5 GB" },
-        { "plan": "Pro", "price": "$29/mo", "users": "5 users", "storage": "50 GB" },
-        { "plan": "Team", "price": "$79/mo", "users": "20 users", "storage": "200 GB" },
-        { "plan": "Enterprise", "price": "Custom", "users": "Unlimited", "storage": "Unlimited" }
-      ]
+      nested: {
+        "competitors": [
+          {
+            "company": "Company A",
+            "type": "Enterprise",
+            "financials": { "revenue": "$50M", "funding": "$100M" },
+            "facilities": { "headquarters": "New York", "employees": 500 }
+          },
+          {
+            "company": "Company B",
+            "type": "Startup",
+            "financials": { "revenue": "$5M", "funding": "$20M" },
+            "facilities": { "headquarters": "San Francisco", "employees": 50 }
+          },
+          {
+            "company": "Company C",
+            "type": "Mid-market",
+            "financials": { "revenue": "$25M", "funding": "$60M" },
+            "facilities": { "headquarters": "Austin", "employees": 200 }
+          }
+        ]
+      }
     };
-    
+
+    // Load example
     document.querySelectorAll('.example-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var example = examples[btn.dataset.example];
         document.getElementById('jsonInput').value = JSON.stringify(example, null, 2);
+        detectColumns();
       });
     });
-    
+
+    // Detect columns from JSON
+    function detectColumns() {
+      var jsonInput = document.getElementById('jsonInput').value.trim();
+      if (!jsonInput) {
+        document.getElementById('columnSection').style.display = 'none';
+        return;
+      }
+
+      try {
+        var data = JSON.parse(jsonInput);
+        var items = extractItems(data);
+        if (items.length === 0) return;
+
+        var depth = parseInt(document.getElementById('flattenDepth').value) || 1;
+        var flatItems = items.map(function(item) {
+          return flattenObject(item, '', depth, 0);
+        });
+
+        // Get unique columns
+        var columnSet = {};
+        detectedColumns = [];
+        flatItems.forEach(function(item) {
+          Object.keys(item).forEach(function(key) {
+            if (!columnSet[key] && typeof item[key] !== 'object') {
+              columnSet[key] = true;
+              detectedColumns.push(key);
+            }
+          });
+        });
+
+        // Show column selector if more than 3 columns
+        if (detectedColumns.length > 3) {
+          updateColumnSelector();
+          document.getElementById('columnSection').style.display = 'block';
+        } else {
+          document.getElementById('columnSection').style.display = 'none';
+        }
+
+      } catch (e) {
+        document.getElementById('columnSection').style.display = 'none';
+      }
+    }
+
+    function updateColumnSelector() {
+      var selector = document.getElementById('columnSelector');
+      selector.innerHTML = '';
+      selector.classList.add('visible');
+
+      detectedColumns.forEach(function(col, index) {
+        var div = document.createElement('div');
+        div.className = 'column-item';
+
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = 'col_' + index;
+        checkbox.value = col;
+        checkbox.checked = true;
+
+        var label = document.createElement('label');
+        label.htmlFor = 'col_' + index;
+        label.textContent = formatHeader(col);
+
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        selector.appendChild(div);
+      });
+    }
+
+    function getSelectedColumns() {
+      var checkboxes = document.querySelectorAll('#columnSelector input:checked');
+      if (checkboxes.length === 0 || checkboxes.length === detectedColumns.length) {
+        return null; // All columns
+      }
+      return Array.from(checkboxes).map(function(cb) { return cb.value; });
+    }
+
+    // Helper functions (matching code.js)
+    function extractItems(data) {
+      if (Array.isArray(data)) return data;
+      var arrayKeys = ['items', 'data', 'products', 'results', 'records', 'entries', 'rows', 'list', 'competitors', 'users'];
+      for (var i = 0; i < arrayKeys.length; i++) {
+        var key = arrayKeys[i];
+        if (data[key] && Array.isArray(data[key])) return data[key];
+      }
+      for (var key in data) {
+        if (Array.isArray(data[key]) && data[key].length > 0) return data[key];
+      }
+      return [data];
+    }
+
+    function flattenObject(obj, prefix, maxDepth, currentDepth) {
+      prefix = prefix || '';
+      maxDepth = maxDepth || 2;
+      currentDepth = currentDepth || 0;
+      var result = {};
+      for (var key in obj) {
+        var value = obj[key];
+        var newKey = prefix ? prefix + '.' + key : key;
+        if (value === null || value === undefined) {
+          result[newKey] = '-';
+        } else if (Array.isArray(value)) {
+          result[newKey] = value.join(', ');
+        } else if (typeof value === 'object' && currentDepth < maxDepth) {
+          var nested = flattenObject(value, newKey, maxDepth, currentDepth + 1);
+          for (var nestedKey in nested) result[nestedKey] = nested[nestedKey];
+        } else if (typeof value === 'object') {
+          result[newKey] = JSON.stringify(value);
+        } else {
+          result[newKey] = value;
+        }
+      }
+      return result;
+    }
+
+    function formatHeader(key) {
+      var parts = key.split('.');
+      var lastPart = parts[parts.length - 1];
+      return lastPart
+        .replace(/_/g, ' ')
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+    }
+
+    // Update columns when depth changes
+    document.getElementById('flattenDepth').addEventListener('change', detectColumns);
+
+    // Detect on input
+    document.getElementById('jsonInput').addEventListener('input', function() {
+      clearTimeout(this.detectTimeout);
+      this.detectTimeout = setTimeout(detectColumns, 500);
+    });
+
+    // Generate button
+    document.getElementById('generateBtn').addEventListener('click', function() {
+      var jsonInput = document.getElementById('jsonInput').value.trim();
+      var messageArea = document.getElementById('messageArea');
+
+      if (!jsonInput) {
+        messageArea.innerHTML = '<div class="message error">Please paste some JSON data</div>';
+        return;
+      }
+
+      try {
+        var data = JSON.parse(jsonInput);
+        var options = {
+          maxDepth: parseInt(document.getElementById('flattenDepth').value) || 1,
+          maxColWidth: parseInt(document.getElementById('maxColWidth').value) || 300,
+          columns: getSelectedColumns()
+        };
+
+        parent.postMessage({
+          pluginMessage: {
+            type: 'generate',
+            data: data,
+            options: options
+          }
+        }, '*');
+
+        messageArea.innerHTML = '<div class="message">Generating table...</div>';
+      } catch (e) {
+        messageArea.innerHTML = '<div class="message error">Invalid JSON: ' + e.message + '</div>';
+      }
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', function() {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    });
+
     // Listen for messages from plugin
     window.onmessage = function(event) {
       var msg = event.data.pluginMessage;
       var messageArea = document.getElementById('messageArea');
-      
+
       if (msg.type === 'success') {
         messageArea.innerHTML = '<div class="message success">' + msg.message + '</div>';
       } else if (msg.type === 'error') {

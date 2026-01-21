@@ -1,6 +1,6 @@
 {
-  "name": "JSON Design Generator",
-  "id": "json-design-generator-mvp",
+  "name": "Dynamic Table Generator",
+  "id": "dynamic-table-generator",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",
