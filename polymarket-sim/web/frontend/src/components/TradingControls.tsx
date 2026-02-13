@@ -12,8 +12,18 @@ interface TradingControlsProps {
   onBotStatusChange?: (status: any) => void;
 }
 
+// Strategy metadata type
+interface StrategyMetadata {
+  name: string;
+  description: string;
+  risk: string;
+  complexity: string;
+  icon: string;
+  recommended?: boolean;
+}
+
 // Strategy metadata
-const STRATEGIES = {
+const STRATEGIES: Record<string, StrategyMetadata> = {
   // Original strategies
   threshold: {
     name: 'Threshold',
