@@ -1,6 +1,7 @@
 """Application configuration."""
 
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 from functools import lru_cache
 
 
@@ -26,6 +27,46 @@ class Settings(BaseSettings):
 
     # Portfolio
     default_starting_balance: float = 1000.0
+
+    @field_validator('database_url', mode='before')
+    @classmethod
+    def validate_database_url(cls, v):
+        """Use default if empty or None."""
+        if not v:
+            return "sqlite+aiosqlite:///./temp.db"
+        return v
+
+    @field_validator('supabase_url', mode='before')
+    @classmethod
+    def validate_supabase_url(cls, v):
+        """Use default if empty or None."""
+        if not v:
+            return "https://placeholder.supabase.co"
+        return v
+
+    @field_validator('supabase_key', mode='before')
+    @classmethod
+    def validate_supabase_key(cls, v):
+        """Use default if empty or None."""
+        if not v:
+            return "placeholder-key"
+        return v
+
+    @field_validator('supabase_service_key', mode='before')
+    @classmethod
+    def validate_supabase_service_key(cls, v):
+        """Use default if empty or None."""
+        if not v:
+            return "placeholder-service-key"
+        return v
+
+    @field_validator('jwt_secret_key', mode='before')
+    @classmethod
+    def validate_jwt_secret_key(cls, v):
+        """Use default if empty or None."""
+        if not v:
+            return "temp-secret-key-change-in-production"
+        return v
 
     class Config:
         env_file = ".env"
