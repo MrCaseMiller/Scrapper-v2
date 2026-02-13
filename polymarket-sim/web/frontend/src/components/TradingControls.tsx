@@ -1,12 +1,25 @@
 /**
  * Trading bot controls component with all 7 strategies
- * Last updated: 2026-02-13 19:45 PST - Force rebuild with all strategies
+ * Last updated: 2026-02-13 - SP Design Philosophy compliance
+ * - Removed all emojis, using Lucide icons (filled style)
+ * - Fixed border violations (ONE MOVE RULE)
+ * - Proper SP color palette and spacing
  */
 
 'use client';
 
 import { useState, useEffect } from 'react';
 import { botAPI, marketsAPI } from '../utils/api';
+import {
+  BarChart3,
+  TrendingDown,
+  Gamepad2,
+  Target,
+  Rocket,
+  Droplet,
+  Bot,
+  Star
+} from 'lucide-react';
 
 interface TradingControlsProps {
   onBotStatusChange?: (status: any) => void;
@@ -18,7 +31,7 @@ interface StrategyMetadata {
   description: string;
   risk: string;
   complexity: string;
-  icon: string;
+  Icon: React.ComponentType<{ className?: string }>;
   recommended?: boolean;
 }
 
@@ -30,21 +43,21 @@ const STRATEGIES: Record<string, StrategyMetadata> = {
     description: 'Buy below/sell above price thresholds',
     risk: 'Low',
     complexity: 'Simple',
-    icon: '📊'
+    Icon: BarChart3
   },
   mean_reversion: {
     name: 'Mean Reversion',
     description: 'Trade when price deviates from mean',
     risk: 'Medium',
     complexity: 'Medium',
-    icon: '📉'
+    Icon: TrendingDown
   },
   manual: {
     name: 'Manual',
     description: 'Manual control via API',
     risk: 'Custom',
     complexity: 'Simple',
-    icon: '🎮'
+    Icon: Gamepad2
   },
 
   // New professional strategies
@@ -53,7 +66,7 @@ const STRATEGIES: Record<string, StrategyMetadata> = {
     description: 'Arbitrage YES+NO mispricing (2.5%+ spread)',
     risk: 'Very Low',
     complexity: 'Low',
-    icon: '🎯',
+    Icon: Target,
     recommended: true
   },
   momentum_lag_arb: {
@@ -61,21 +74,21 @@ const STRATEGIES: Record<string, StrategyMetadata> = {
     description: 'Front-run 15-min markets using spot exchange data',
     risk: 'Medium',
     complexity: 'Medium',
-    icon: '🚀'
+    Icon: Rocket
   },
   market_making: {
     name: 'Market Making',
     description: 'Provide liquidity and earn bid-ask spreads',
     risk: 'Medium',
     complexity: 'High',
-    icon: '💧'
+    Icon: Droplet
   },
   llm_directional: {
     name: 'LLM Directional',
     description: 'AI-driven directional betting using news analysis',
     risk: 'High',
     complexity: 'Very High',
-    icon: '🤖'
+    Icon: Bot
   },
 };
 
@@ -225,7 +238,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 min={0}
                 max={1}
                 step={0.05}
-                className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
             <div>
@@ -239,7 +252,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 min={0}
                 max={1}
                 step={0.05}
-                className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
             <div>
@@ -253,7 +266,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 min={10}
                 max={1000}
                 step={10}
-                className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
           </div>
@@ -275,7 +288,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={1.0}
                   max={10.0}
                   step={0.1}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -290,7 +303,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0}
                   max={0.1}
                   step={0.001}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -305,7 +318,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={50}
                   max={5000}
                   step={50}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
             </div>
@@ -328,7 +341,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0.1}
                   max={2.0}
                   step={0.1}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -343,7 +356,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0.5}
                   max={1.0}
                   step={0.05}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -356,7 +369,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   value={assets}
                   onChange={(e) => setAssets(e.target.value)}
                   placeholder="BTC,ETH,SOL"
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
             </div>
@@ -379,7 +392,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0.005}
                   max={0.1}
                   step={0.005}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -394,7 +407,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={10}
                   max={500}
                   step={10}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -409,7 +422,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={100}
                   max={5000}
                   step={100}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
             </div>
@@ -432,7 +445,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={5}
                   max={50}
                   step={5}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -447,7 +460,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0.5}
                   max={1.0}
                   step={0.05}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
               <div>
@@ -462,7 +475,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={1}
                   max={72}
                   step={1}
-                  className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
                 />
               </div>
             </div>
@@ -475,7 +488,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
   };
 
   return (
-    <div className="bg-background border border-border">
+    <div className="bg-background rounded-lg">
       {/* Header */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
@@ -492,14 +505,14 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
             <button
               onClick={handleStop}
               disabled={loading}
-              className="touch-target px-6 py-2 bg-error/20 text-error font-human text-body hover:bg-error/30 disabled:opacity-50 transition-colors"
+              className="touch-target px-6 py-2 bg-error/20 text-error font-human text-body hover:brightness-110 disabled:opacity-50 transition-all rounded-lg"
             >
               Stop Bot
             </button>
           ) : (
             <button
               onClick={() => setShowConfig(!showConfig)}
-              className="touch-target px-6 py-2 bg-accent text-white font-human text-body hover:bg-accent/80 transition-colors"
+              className="touch-target px-6 py-2 bg-accent text-white font-human text-body hover:brightness-110 transition-all rounded-lg"
             >
               {showConfig ? 'Cancel' : 'Start Bot'}
             </button>
@@ -509,22 +522,21 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
         {/* Status Info */}
         {botStatus && (
           <div className="mt-6 grid grid-cols-4 gap-4">
-            <div className="p-4 bg-surface border border-border">
+            <div className="p-4 bg-surface rounded-lg">
               <div className="font-human text-caption text-text-medium mb-1">Strategy</div>
               <div className="font-machine text-data text-text-high capitalize">
-                {STRATEGIES[botStatus.strategy as keyof typeof STRATEGIES]?.icon}{' '}
                 {STRATEGIES[botStatus.strategy as keyof typeof STRATEGIES]?.name || botStatus.strategy}
               </div>
             </div>
-            <div className="p-4 bg-surface border border-border">
+            <div className="p-4 bg-surface rounded-lg">
               <div className="font-human text-caption text-text-medium mb-1">Markets</div>
               <div className="font-machine text-data text-text-high">{botStatus.active_markets}</div>
             </div>
-            <div className="p-4 bg-surface border border-border">
+            <div className="p-4 bg-surface rounded-lg">
               <div className="font-human text-caption text-text-medium mb-1">Signals</div>
               <div className="font-machine text-data text-text-high">{botStatus.signal_count}</div>
             </div>
-            <div className="p-4 bg-surface border border-border">
+            <div className="p-4 bg-surface rounded-lg">
               <div className="font-human text-caption text-text-medium mb-1">Errors</div>
               <div className="font-machine text-data text-text-high text-error">{botStatus.error_count}</div>
             </div>
@@ -540,37 +552,38 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
             <label className="block font-human text-label text-text-medium mb-3">
               Select Strategy
             </label>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {Object.entries(STRATEGIES).map(([key, meta]) => (
-                <button
-                  key={key}
-                  onClick={() => setStrategy(key)}
-                  className={`relative touch-target p-4 border-2 transition-all ${
-                    strategy === key
-                      ? 'border-accent bg-accent/10'
-                      : 'border-border bg-surface hover:border-accent/50'
-                  }`}
-                >
-                  {meta.recommended && (
-                    <span className="absolute top-2 right-2 px-2 py-0.5 bg-success text-white text-xs font-machine rounded">
-                      ⭐
-                    </span>
-                  )}
-                  <div className="text-2xl mb-2">{meta.icon}</div>
-                  <div className="font-human text-body text-text-high mb-1">{meta.name}</div>
-                  <div className="font-human text-caption text-text-medium">{meta.description}</div>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className={`text-xs font-machine px-2 py-0.5 rounded ${
-                      meta.risk === 'Very Low' || meta.risk === 'Low' ? 'bg-success/20 text-success' :
-                      meta.risk === 'Medium' ? 'bg-warning/20 text-warning' :
-                      'bg-error/20 text-error'
-                    }`}>
-                      {meta.risk}
-                    </span>
-                    <span className="text-xs font-machine text-text-low">{meta.complexity}</span>
-                  </div>
-                </button>
-              ))}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+              {Object.entries(STRATEGIES).map(([key, meta]) => {
+                const IconComponent = meta.Icon;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setStrategy(key)}
+                    className={`relative touch-target p-4 transition-all rounded-lg ${
+                      strategy === key
+                        ? 'bg-accent/10'
+                        : 'bg-surface hover:brightness-105'
+                    }`}
+                  >
+                    {meta.recommended && (
+                      <Star className="absolute top-2 right-2 w-4 h-4 fill-accent text-accent" />
+                    )}
+                    <IconComponent className={`w-6 h-6 mb-2 ${strategy === key ? 'text-accent' : 'text-text-medium'}`} />
+                    <div className="font-human text-body text-text-high mb-1">{meta.name}</div>
+                    <div className="font-human text-caption text-text-medium">{meta.description}</div>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-xs font-machine px-2 py-0.5 rounded ${
+                        meta.risk === 'Very Low' || meta.risk === 'Low' ? 'bg-success/20 text-success' :
+                        meta.risk === 'Medium' ? 'bg-warning/20 text-warning' :
+                        'bg-error/20 text-error'
+                      }`}>
+                        {meta.risk}
+                      </span>
+                      <span className="text-xs font-machine text-text-low">{meta.complexity}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -586,7 +599,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 onChange={(e) => setMaxMarkets(parseInt(e.target.value))}
                 min={1}
                 max={50}
-                className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
 
@@ -600,7 +613,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 onChange={(e) => setUpdateInterval(parseInt(e.target.value))}
                 min={1}
                 max={60}
-                className="w-full px-4 py-2 bg-surface border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors"
+                className="w-full px-4 py-2 bg-background border border-border font-machine text-data text-text-high focus:outline-none focus:border-accent transition-colors rounded-lg"
               />
             </div>
           </div>
