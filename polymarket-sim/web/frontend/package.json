@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "echo '=== DEBUG: Verifying TradingControls.tsx ===' && grep -o 'sum_to_one_arb' src/components/TradingControls.tsx | wc -l && echo '=== Count above (should be 4+ for NEW code, 0 for OLD) ===' && next build",
     "start": "next start",
     "lint": "next lint"
   },
