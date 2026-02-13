@@ -38,14 +38,19 @@ This project follows the **Special Projects Design Philosophy** (see `special-pr
 **Root Cause:** Backend API endpoints were disabled, and backend not deployed to Railway
 
 **Solution - Next.js API Routes (Quick Fix):**
-- ✅ Created Next.js API routes for bot functionality:
+- ✅ Created Next.js API routes for complete functionality:
   - `/api/bot/start` - Start trading bot with configuration
   - `/api/bot/stop` - Stop running bot
   - `/api/bot/status` - Get bot status
   - `/api/markets` - Get market list (mock data)
+  - `/api/portfolio` - Get portfolio data (mock $10k balance)
+  - `/api/positions` - Get positions (empty array)
+  - `/api/fills` - Get fills (empty array)
+  - `/api/orders` - Get orders (empty array)
 - ✅ Updated API client to use relative URLs in production
 - ✅ Mock implementation simulates bot trading for demo purposes
 - ✅ Supports all 7 strategies in UI
+- ✅ Complete mock API layer - no backend needed for demo
 
 **Backend Preparation (For Future Real Trading):**
 - ✅ Uncommented bot endpoints in FastAPI backend
@@ -63,6 +68,10 @@ This project follows the **Special Projects Design Philosophy** (see `special-pr
 - `polymarket-sim/web/frontend/src/pages/api/bot/stop.ts` (NEW)
 - `polymarket-sim/web/frontend/src/pages/api/bot/status.ts` (NEW)
 - `polymarket-sim/web/frontend/src/pages/api/markets.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/portfolio.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/positions.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/fills.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/orders.ts` (NEW)
 - `polymarket-sim/web/frontend/src/utils/api.ts`
 - `polymarket-sim/web/backend/main.py`
 
