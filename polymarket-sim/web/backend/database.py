@@ -15,8 +15,11 @@ from .config import get_settings
 settings = get_settings()
 
 # Prepare database URL for async engine
-db_url = settings.database_url or "sqlite+aiosqlite:///./temp.db"
-if db_url.startswith("postgresql://"):
+db_url = settings.database_url
+# Handle empty/None values
+if not db_url or db_url.strip() == "":
+    db_url = "sqlite+aiosqlite:///./temp.db"
+elif db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
 
 # Create async engine
