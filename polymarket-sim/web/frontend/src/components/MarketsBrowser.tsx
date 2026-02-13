@@ -39,7 +39,7 @@ export default function MarketsBrowser() {
   };
 
   return (
-    <div className="bg-bg-secondary rounded-lg">
+    <div>
       <button
         onClick={() => setShowMarkets(!showMarkets)}
         className="touch-target w-full p-6 flex justify-between items-center"
@@ -73,7 +73,7 @@ export default function MarketsBrowser() {
                   onClick={() => setSelectedMarket(
                     selectedMarket?.market_id === market.market_id ? null : market
                   )}
-                  className="touch-target p-4 rounded-lg bg-bg-primary cursor-pointer"
+                  className="touch-target p-4 cursor-pointer"
                 >
                   {/* Market Header */}
                   <div className="flex justify-between items-start gap-4">
@@ -82,7 +82,7 @@ export default function MarketsBrowser() {
                         {market.question}
                       </h3>
                       {market.category && (
-                        <span className="inline-block px-2 py-1 bg-accent/20 text-accent font-human text-caption rounded">
+                        <span className="inline-block px-2 py-1 bg-accent/20 text-accent font-human text-caption">
                           {market.category}
                         </span>
                       )}

@@ -43,7 +43,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   if (showConfirmation) {
     return (
-      <div className="w-full max-w-md p-8 bg-bg-secondary rounded-lg">
+      <div className="w-full max-w-md p-8">
         <div className="text-center">
           <h2 className="font-human text-h1 text-text-high mb-6">
             Check Your Email
@@ -54,7 +54,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           </p>
           <button
             onClick={() => router.push('/login')}
-            className="touch-target w-full py-3 px-4 bg-accent text-white rounded-lg font-human text-body"
+            className="touch-target w-full py-3 px-4 bg-accent text-white font-human text-body"
           >
             Go to Login
           </button>
@@ -64,14 +64,14 @@ export default function AuthForm({ mode }: AuthFormProps) {
   }
 
   return (
-    <div className="w-full max-w-md p-8 bg-bg-secondary rounded-lg">
+    <div className="w-full max-w-md p-8">
       <h2 className="font-human text-h1 text-text-high mb-8 text-center">
         {mode === 'login' ? 'Login' : 'Sign Up'}
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="p-4 bg-error/10 rounded-lg font-human text-body text-error">
+          <div className="p-4 bg-error/10 font-human text-body text-error">
             {error}
           </div>
         )}
@@ -85,7 +85,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+            className="w-full px-4 py-3 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
             required
             disabled={loading}
           />
@@ -100,7 +100,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+            className="w-full px-4 py-3 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
             required
             minLength={6}
             disabled={loading}
@@ -110,7 +110,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="touch-target w-full py-3 px-4 bg-accent text-white rounded-lg font-human text-body disabled:opacity-50 disabled:cursor-not-allowed"
+          className="touch-target w-full py-3 px-4 bg-accent text-white font-human text-body disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Loading...' : mode === 'login' ? 'Login' : 'Sign Up'}
         </button>

@@ -81,7 +81,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
   };
 
   return (
-    <div className="bg-bg-secondary rounded-lg">
+    <div>
       {/* Header */}
       <div className="p-6">
         <div className="flex items-center justify-between">
@@ -98,14 +98,14 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
             <button
               onClick={handleStop}
               disabled={loading}
-              className="touch-target px-4 py-2 bg-error/20 text-error rounded-lg font-human text-body disabled:opacity-50"
+              className="touch-target px-4 py-2 bg-error/20 text-error font-human text-body disabled:opacity-50"
             >
               Stop
             </button>
           ) : (
             <button
               onClick={() => setShowConfig(!showConfig)}
-              className="touch-target px-4 py-2 bg-accent text-white rounded-lg font-human text-body"
+              className="touch-target px-4 py-2 bg-accent text-white font-human text-body"
             >
               {showConfig ? 'Cancel' : 'Start Bot'}
             </button>
@@ -148,10 +148,10 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 <button
                   key={s}
                   onClick={() => setStrategy(s)}
-                  className={`touch-target px-4 py-2 rounded-lg font-human text-body transition-colors ${
+                  className={`touch-target px-4 py-2 font-human text-body transition-colors ${
                     strategy === s
                       ? 'bg-accent text-white'
-                      : 'bg-bg-primary text-text-medium'
+                      : 'text-text-medium'
                   }`}
                 >
                   {s.replace('_', ' ')}
@@ -172,7 +172,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 onChange={(e) => setMaxMarkets(parseInt(e.target.value))}
                 min={1}
                 max={20}
-                className="w-full px-4 py-2 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+                className="w-full px-4 py-2 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
               />
             </div>
 
@@ -186,7 +186,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                 onChange={(e) => setUpdateInterval(parseInt(e.target.value))}
                 min={1}
                 max={60}
-                className="w-full px-4 py-2 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+                className="w-full px-4 py-2 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
               />
             </div>
           </div>
@@ -205,7 +205,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0}
                   max={1}
                   step={0.05}
-                  className="w-full px-4 py-2 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+                  className="w-full px-4 py-2 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
                 />
               </div>
 
@@ -220,7 +220,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={0}
                   max={1}
                   step={0.05}
-                  className="w-full px-4 py-2 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+                  className="w-full px-4 py-2 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
                 />
               </div>
 
@@ -235,7 +235,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
                   min={10}
                   max={1000}
                   step={10}
-                  className="w-full px-4 py-2 bg-bg-primary rounded-lg font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
+                  className="w-full px-4 py-2 font-machine text-data text-text-high focus:outline-none focus:bg-white/5 transition-colors"
                 />
               </div>
             </div>
@@ -245,7 +245,7 @@ export default function TradingControls({ onBotStatusChange }: TradingControlsPr
           <button
             onClick={handleStart}
             disabled={loading}
-            className="touch-target w-full py-3 bg-accent text-white rounded-lg font-human text-body disabled:opacity-50"
+            className="touch-target w-full py-3 bg-accent text-white font-human text-body disabled:opacity-50"
           >
             {loading ? 'Starting...' : 'Start Trading'}
           </button>

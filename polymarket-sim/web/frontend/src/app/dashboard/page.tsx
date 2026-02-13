@@ -119,14 +119,14 @@ export default function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-bg-secondary p-6 rounded-lg">
+          <div className="p-6">
             <div className="font-human text-label text-text-medium mb-3">Total Value</div>
             <div className="font-machine text-data text-text-high text-3xl">
               ${portfolio?.total_value.toFixed(2)}
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg">
+          <div className="p-6">
             <div className="font-human text-label text-text-medium mb-3">Total P&L</div>
             <div className={`font-machine text-data text-3xl ${
               (portfolio?.total_pnl || 0) >= 0 ? 'text-success' : 'text-error'
@@ -136,7 +136,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg">
+          <div className="p-6">
             <div className="font-human text-label text-text-medium mb-3">Return</div>
             <div className={`font-machine text-data text-3xl ${
               (portfolio?.total_return_pct || 0) >= 0 ? 'text-success' : 'text-error'
@@ -146,7 +146,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-bg-secondary p-6 rounded-lg">
+          <div className="p-6">
             <div className="font-human text-label text-text-medium mb-3">Positions</div>
             <div className="font-machine text-data text-text-high text-3xl">
               {portfolio?.num_positions || 0}
@@ -155,7 +155,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Positions */}
-        <div className="bg-bg-secondary rounded-lg mb-8">
+        <div className="mb-8">
           <button
             onClick={() => setShowPositions(!showPositions)}
             className="touch-target w-full p-6 flex justify-between items-center"
@@ -227,7 +227,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Fills */}
-        <div className="bg-bg-secondary rounded-lg mb-8">
+        <div className="mb-8">
           <button
             onClick={() => setShowFills(!showFills)}
             className="touch-target w-full p-6 flex justify-between items-center"
