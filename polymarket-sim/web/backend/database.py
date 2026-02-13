@@ -14,9 +14,14 @@ from .config import get_settings
 
 settings = get_settings()
 
+# Prepare database URL for async engine
+db_url = settings.database_url
+if db_url.startswith("postgresql://"):
+    db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
+
 # Create async engine
 engine = create_async_engine(
-    settings.database_url.replace("postgresql://", "postgresql+asyncpg://"),
+    db_url,
     echo=False,
     pool_pre_ping=True
 )

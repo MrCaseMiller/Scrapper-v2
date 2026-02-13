@@ -7,16 +7,16 @@ from functools import lru_cache
 class Settings(BaseSettings):
     """Application settings from environment variables."""
 
-    # Supabase
-    supabase_url: str
-    supabase_key: str
-    supabase_service_key: str
+    # Supabase (optional with defaults for temp deployments)
+    supabase_url: str = "https://placeholder.supabase.co"
+    supabase_key: str = "placeholder-key"
+    supabase_service_key: str = "placeholder-service-key"
 
-    # Database
-    database_url: str
+    # Database (optional with SQLite default for temp deployments)
+    database_url: str = "sqlite+aiosqlite:///./temp.db"
 
-    # JWT
-    jwt_secret_key: str
+    # JWT (optional with temp default)
+    jwt_secret_key: str = "temp-secret-key-change-in-production"
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
 
