@@ -1,5 +1,6 @@
 /**
  * Trading bot controls component with all 7 strategies
+ * Last updated: 2026-02-13 19:45 PST - Force rebuild with all strategies
  */
 
 'use client';
