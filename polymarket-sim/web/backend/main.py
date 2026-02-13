@@ -1,0 +1,414 @@
+"""FastAPI backend for Polymarket Simulation Trader web app."""
+
+from fastapi import FastAPI, Depends, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Optional
+import asyncio
+import json
+
+from .config import get_settings
+from .auth import (
+    UserSignup, UserLogin, Token, TokenData,
+    signup_user, login_user, get_current_user
+)
+from .database import (
+    init_db, get_user_portfolio, get_user_positions,
+    get_recent_fills, get_resting_orders
+)
+from .bot_manager import bot_manager
+from pydantic import BaseModel
+import sys
+from pathlib import Path
+
+# Add parent directory to import simulation modules
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+settings = get_settings()
+
+app = FastAPI(
+    title="Polymarket Simulation Trader",
+    description="Paper trading platform for Polymarket prediction markets",
+    version="1.0.0"
+)
+
+# CORS middleware - Allow all origins for now
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins temporarily
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# Models
+class PortfolioResponse(BaseModel):
+    balance: float
+    total_deposited: float
+    realized_pnl: float
+    total_fees_paid: float
+    positions_value: float
+    total_value: float
+    unrealized_pnl: float
+    total_pnl: float
+    total_return_pct: float
+    num_positions: int
+
+
+class PositionResponse(BaseModel):
+    token_id: str
+    market_id: str
+    market_side: str
+    shares: float
+    avg_entry_price: float
+    current_price: float
+    cost_basis: float
+    market_value: float
+    unrealized_pnl: float
+    unrealized_pnl_pct: float
+
+
+class FillResponse(BaseModel):
+    fill_id: str
+    order_id: str
+    market_id: str
+    token_id: str
+    side: str
+    market_side: str
+    shares: float
+    price: float
+    size: float
+    fee: float
+    timestamp: str
+
+
+class OrderResponse(BaseModel):
+    order_id: str
+    market_id: str
+    token_id: str
+    side: str
+    market_side: str
+    size: float
+    price: float
+    status: str
+    created_at: str
+    expires_at: str | None
+
+
+# WebSocket connection manager
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: dict[str, WebSocket] = {}
+
+    async def connect(self, user_id: str, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections[user_id] = websocket
+
+    def disconnect(self, user_id: str):
+        if user_id in self.active_connections:
+            del self.active_connections[user_id]
+
+    async def send_personal_message(self, user_id: str, message: dict):
+        if user_id in self.active_connections:
+            try:
+                await self.active_connections[user_id].send_json(message)
+            except:
+                self.disconnect(user_id)
+
+
+manager = ConnectionManager()
+
+
+# Startup event
+@app.on_event("startup")
+async def startup_event():
+    """Initialize database on startup."""
+    await init_db()
+
+
+# Shutdown event
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown."""
+    await bot_manager.stop_all()
+
+
+# Root endpoint
+@app.get("/")
+async def root():
+    """Root endpoint with API information."""
+    return {
+        "name": "Polymarket Simulation Trader API",
+        "version": "1.0.0",
+        "message": "This is the backend API. Visit the frontend URL to use the web interface.",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
+# Health check
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy"}
+
+
+# Authentication endpoints
+@app.post("/api/auth/signup", response_model=Token)
+async def signup(user_data: UserSignup):
+    """
+    Sign up new user with email confirmation.
+
+    Sends confirmation email via Supabase.
+    """
+    return await signup_user(user_data.email, user_data.password)
+
+
+@app.post("/api/auth/login", response_model=Token)
+async def login(user_data: UserLogin):
+    """Login user."""
+    return await login_user(user_data.email, user_data.password)
+
+
+@app.get("/api/auth/me")
+async def get_me(current_user: TokenData = Depends(get_current_user)):
+    """Get current user info."""
+    return {
+        "user_id": current_user.user_id,
+        "email": current_user.email
+    }
+
+
+# Portfolio endpoints
+@app.get("/api/portfolio", response_model=PortfolioResponse)
+async def get_portfolio(current_user: TokenData = Depends(get_current_user)):
+    """Get user's portfolio."""
+    portfolio = await get_user_portfolio(current_user.user_id)
+
+    if not portfolio:
+        raise HTTPException(status_code=404, detail="Portfolio not found")
+
+    # Get positions to calculate values
+    positions = await get_user_positions(current_user.user_id)
+
+    positions_value = sum(
+        pos.shares * pos.current_price for pos in positions
+    )
+
+    total_value = portfolio.balance + positions_value
+    unrealized_pnl = sum(
+        (pos.shares * pos.current_price) - (pos.shares * pos.avg_entry_price)
+        for pos in positions
+    )
+
+    total_pnl = portfolio.realized_pnl + unrealized_pnl
+    total_return_pct = (
+        ((total_value - portfolio.total_deposited) / portfolio.total_deposited) * 100
+        if portfolio.total_deposited > 0 else 0.0
+    )
+
+    return PortfolioResponse(
+        balance=portfolio.balance,
+        total_deposited=portfolio.total_deposited,
+        realized_pnl=portfolio.realized_pnl,
+        total_fees_paid=portfolio.total_fees_paid,
+        positions_value=positions_value,
+        total_value=total_value,
+        unrealized_pnl=unrealized_pnl,
+        total_pnl=total_pnl,
+        total_return_pct=total_return_pct,
+        num_positions=len(positions)
+    )
+
+
+@app.get("/api/positions", response_model=List[PositionResponse])
+async def get_positions(current_user: TokenData = Depends(get_current_user)):
+    """Get user's positions."""
+    positions = await get_user_positions(current_user.user_id)
+
+    return [
+        PositionResponse(
+            token_id=pos.token_id,
+            market_id=pos.market_id,
+            market_side=pos.market_side,
+            shares=pos.shares,
+            avg_entry_price=pos.avg_entry_price,
+            current_price=pos.current_price,
+            cost_basis=pos.shares * pos.avg_entry_price,
+            market_value=pos.shares * pos.current_price,
+            unrealized_pnl=(pos.shares * pos.current_price) - (pos.shares * pos.avg_entry_price),
+            unrealized_pnl_pct=(
+                (((pos.shares * pos.current_price) - (pos.shares * pos.avg_entry_price)) /
+                 (pos.shares * pos.avg_entry_price) * 100)
+                if pos.shares * pos.avg_entry_price > 0 else 0.0
+            )
+        )
+        for pos in positions
+    ]
+
+
+@app.get("/api/fills", response_model=List[FillResponse])
+async def get_fills(
+    limit: int = 10,
+    current_user: TokenData = Depends(get_current_user)
+):
+    """Get user's recent fills."""
+    fills = await get_recent_fills(current_user.user_id, limit)
+
+    return [
+        FillResponse(
+            fill_id=fill.fill_id,
+            order_id=fill.order_id,
+            market_id=fill.market_id,
+            token_id=fill.token_id,
+            side=fill.side,
+            market_side=fill.market_side,
+            shares=fill.shares,
+            price=fill.price,
+            size=fill.size,
+            fee=fill.fee,
+            timestamp=fill.timestamp.isoformat()
+        )
+        for fill in fills
+    ]
+
+
+@app.get("/api/orders", response_model=List[OrderResponse])
+async def get_orders(current_user: TokenData = Depends(get_current_user)):
+    """Get user's resting orders."""
+    orders = await get_resting_orders(current_user.user_id)
+
+    return [
+        OrderResponse(
+            order_id=order.order_id,
+            market_id=order.market_id,
+            token_id=order.token_id,
+            side=order.side,
+            market_side=order.market_side,
+            size=order.size,
+            price=order.price,
+            status=order.status,
+            created_at=order.created_at.isoformat(),
+            expires_at=order.expires_at.isoformat() if order.expires_at else None
+        )
+        for order in orders
+    ]
+
+
+# WebSocket endpoint for real-time updates
+@app.websocket("/ws/{user_id}")
+async def websocket_endpoint(websocket: WebSocket, user_id: str):
+    """WebSocket endpoint for real-time portfolio updates."""
+    await manager.connect(user_id, websocket)
+
+    try:
+        while True:
+            # Keep connection alive and send periodic updates
+            data = await websocket.receive_text()
+
+            # Echo back (can be used for heartbeat)
+            await websocket.send_json({"type": "pong"})
+
+    except WebSocketDisconnect:
+        manager.disconnect(user_id)
+
+
+# Bot control models
+class BotConfig(BaseModel):
+    strategy: str  # "threshold", "mean_reversion", "manual"
+    max_markets: int = 5
+    update_interval: int = 5  # seconds
+    slippage_factor: float = 0.001
+    fee_rate: float = 0.02
+    order_ttl_hours: int = 24
+    strategy_params: dict = {}
+
+
+class BotStatusResponse(BaseModel):
+    user_id: str
+    running: bool
+    strategy: Optional[str]
+    active_markets: int
+    signal_count: int
+    error_count: int
+    last_update: Optional[str]
+    config: dict
+
+
+class MarketResponse(BaseModel):
+    market_id: str
+    question: str
+    end_date: str
+    yes_token_id: str
+    no_token_id: str
+    active: bool
+    category: Optional[str]
+
+
+# Bot control endpoints - REAL POLYMARKET INTEGRATION
+@app.post("/api/bot/start", response_model=BotStatusResponse)
+async def start_bot(
+    config: BotConfig,
+    current_user: TokenData = Depends(get_current_user)
+):
+    """Start trading bot for current user with real Polymarket data."""
+    status = await bot_manager.start_bot(
+        current_user.user_id,
+        config.dict()
+    )
+    return BotStatusResponse(**status)
+
+
+@app.post("/api/bot/stop")
+async def stop_bot(current_user: TokenData = Depends(get_current_user)):
+    """Stop trading bot for current user."""
+    return await bot_manager.stop_bot(current_user.user_id)
+
+
+@app.get("/api/bot/status")
+async def get_bot_status(current_user: TokenData = Depends(get_current_user)):
+    """Get trading bot status for current user."""
+    status = bot_manager.get_bot_status(current_user.user_id)
+    return status
+
+
+# Markets endpoint - REAL POLYMARKET API
+@app.get("/api/markets", response_model=List[MarketResponse])
+async def get_markets(
+    limit: int = 20,
+    current_user: TokenData = Depends(get_current_user)
+):
+    """Get active Polymarket markets from real Polymarket API."""
+    from src.data.gamma import GammaClient
+
+    gamma = GammaClient(
+        base_url="https://gamma-api.polymarket.com",
+        timeout=10,
+        max_retries=3,
+        retry_backoff=2.0,
+        cache_ttl=60,
+        db=None
+    )
+
+    try:
+        markets = await gamma.get_markets(limit=limit, active=True, closed=False)
+
+        return [
+            MarketResponse(
+                market_id=m.market_id,
+                question=m.question,
+                end_date=m.end_date.isoformat(),
+                yes_token_id=m.yes_token_id,
+                no_token_id=m.no_token_id,
+                active=m.active,
+                category=getattr(m, 'category', None)
+            )
+            for m in markets
+        ]
+    finally:
+        await gamma.close()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

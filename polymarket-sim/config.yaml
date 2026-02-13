@@ -1,0 +1,47 @@
+# Polymarket Simulation Trader Configuration
+
+# Portfolio Settings
+portfolio:
+  starting_balance: 1000.0  # Starting USDC balance
+
+# Execution Settings
+execution:
+  slippage_factor: 0.001  # 0.1% slippage
+  fee_rate: 0.02  # 2% fee (Polymarket standard)
+  order_ttl_hours: 24  # Resting order time-to-live
+
+# Data Settings
+data:
+  cache_ttl_seconds: 60  # Market data cache TTL
+  price_update_interval: 1  # Price update check interval (seconds)
+  orderbook_depth: 10  # Number of orderbook levels to fetch
+
+# Strategy Settings
+strategy:
+  active: "manual"  # Options: "manual", "threshold", "mean_reversion"
+
+  # NaiveThreshold strategy parameters
+  threshold:
+    buy_below: 0.3  # Buy YES when price below this
+    sell_above: 0.7  # Sell YES when price above this
+    position_size: 100  # Size per trade in USDC
+
+  # MeanReversion strategy parameters
+  mean_reversion:
+    lookback_periods: 24  # Hours to calculate mean
+    deviation_threshold: 0.15  # Trade when deviation exceeds this
+    position_size: 100
+
+# UI Settings
+ui:
+  refresh_rate_seconds: 1  # Dashboard refresh rate
+  portfolio_recalc_seconds: 5  # Portfolio recalc interval
+
+# API Settings
+api:
+  gamma_base_url: "https://gamma-api.polymarket.com"
+  clob_base_url: "https://clob.polymarket.com"
+  ws_url: "wss://ws-subscriptions-clob.polymarket.com/ws/market"
+  request_timeout: 10
+  max_retries: 3
+  retry_backoff_factor: 2
