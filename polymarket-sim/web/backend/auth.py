@@ -14,8 +14,10 @@ from .database import create_user, create_portfolio, get_user_portfolio
 settings = get_settings()
 security = HTTPBearer()
 
-# Supabase client
-supabase: Client = create_client(settings.supabase_url, settings.supabase_key)
+# Supabase client (optional for temp deployments)
+supabase: Optional[Client] = None
+if not settings.supabase_url.startswith("https://placeholder"):
+    supabase = create_client(settings.supabase_url, settings.supabase_key)
 
 
 # Models
@@ -53,6 +55,12 @@ async def signup_user(email: str, password: str) -> Token:
     Returns:
         Token with access credentials
     """
+    if supabase is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Authentication service not configured. Please set SUPABASE_URL and SUPABASE_KEY environment variables."
+        )
+
     try:
         # Sign up with Supabase (sends confirmation email)
         response = supabase.auth.sign_up({
@@ -103,6 +111,12 @@ async def login_user(email: str, password: str) -> Token:
     Returns:
         Token with access credentials
     """
+    if supabase is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Authentication service not configured. Please set SUPABASE_URL and SUPABASE_KEY environment variables."
+        )
+
     try:
         # Login with Supabase
         response = supabase.auth.sign_in_with_password({
@@ -210,6 +224,9 @@ async def verify_email_token(token: str) -> bool:
     Returns:
         True if verified successfully
     """
+    if supabase is None:
+        return False
+
     try:
         response = supabase.auth.verify_otp({
             "token": token,
