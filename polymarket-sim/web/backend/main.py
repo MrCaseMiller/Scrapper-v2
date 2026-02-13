@@ -120,6 +120,19 @@ async def startup_event():
     await init_db()
 
 
+# Root endpoint
+@app.get("/")
+async def root():
+    """Root endpoint with API information."""
+    return {
+        "name": "Polymarket Simulation Trader API",
+        "version": "1.0.0",
+        "message": "This is the backend API. Visit the frontend URL to use the web interface.",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
 # Health check
 @app.get("/health")
 async def health_check():
