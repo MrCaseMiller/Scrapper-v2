@@ -2,14 +2,19 @@
 
 from datetime import datetime, timedelta
 from typing import Optional
+import uuid
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
+from passlib.context import CryptContext
 from supabase import create_client, Client
 from pydantic import BaseModel
 
 from .config import get_settings
-from .database import create_user, create_portfolio, get_user_portfolio
+from .database import create_user, create_portfolio, get_user_portfolio, get_user_by_email
+
+# Password hashing
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 settings = get_settings()
 security = HTTPBearer()
@@ -43,6 +48,17 @@ class TokenData(BaseModel):
     email: str
 
 
+# Password helper functions
+def hash_password(password: str) -> str:
+    """Hash a password."""
+    return pwd_context.hash(password)
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify a password against a hash."""
+    return pwd_context.verify(plain_password, hashed_password)
+
+
 # Authentication functions
 async def signup_user(email: str, password: str) -> Token:
     """
@@ -55,49 +71,87 @@ async def signup_user(email: str, password: str) -> Token:
     Returns:
         Token with access credentials
     """
-    if supabase is None:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Authentication service not configured. Please set SUPABASE_URL and SUPABASE_KEY environment variables."
-        )
+    # Use Supabase if configured
+    if supabase is not None:
+        try:
+            # Sign up with Supabase (sends confirmation email)
+            response = supabase.auth.sign_up({
+                "email": email,
+                "password": password
+            })
 
-    try:
-        # Sign up with Supabase (sends confirmation email)
-        response = supabase.auth.sign_up({
-            "email": email,
-            "password": password
-        })
+            if not response.user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Failed to create user"
+                )
 
-        if not response.user:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Failed to create user"
+            user_id = response.user.id
+
+            # Create user record in our database
+            await create_user(user_id, email)
+
+            # Create initial portfolio
+            await create_portfolio(user_id, settings.default_starting_balance)
+
+            # Create access token
+            access_token = create_access_token(
+                data={"sub": user_id, "email": email}
             )
 
-        user_id = response.user.id
+            return Token(
+                access_token=access_token,
+                user_id=user_id,
+                email=email
+            )
 
-        # Create user record in our database
-        await create_user(user_id, email)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Signup failed: {str(e)}"
+            )
 
-        # Create initial portfolio
-        await create_portfolio(user_id, settings.default_starting_balance)
+    # Fallback to local database auth
+    else:
+        try:
+            # Check if user already exists
+            existing_user = await get_user_by_email(email)
+            if existing_user:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="User with this email already exists"
+                )
 
-        # Create access token
-        access_token = create_access_token(
-            data={"sub": user_id, "email": email}
-        )
+            # Generate user ID
+            user_id = str(uuid.uuid4())
 
-        return Token(
-            access_token=access_token,
-            user_id=user_id,
-            email=email
-        )
+            # Hash password
+            password_hash = hash_password(password)
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Signup failed: {str(e)}"
-        )
+            # Create user record in database
+            await create_user(user_id, email, password_hash)
+
+            # Create initial portfolio
+            await create_portfolio(user_id, settings.default_starting_balance)
+
+            # Create access token
+            access_token = create_access_token(
+                data={"sub": user_id, "email": email}
+            )
+
+            return Token(
+                access_token=access_token,
+                user_id=user_id,
+                email=email
+            )
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Signup failed: {str(e)}"
+            )
 
 
 async def login_user(email: str, password: str) -> Token:
@@ -111,48 +165,88 @@ async def login_user(email: str, password: str) -> Token:
     Returns:
         Token with access credentials
     """
-    if supabase is None:
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Authentication service not configured. Please set SUPABASE_URL and SUPABASE_KEY environment variables."
-        )
+    # Use Supabase if configured
+    if supabase is not None:
+        try:
+            # Login with Supabase
+            response = supabase.auth.sign_in_with_password({
+                "email": email,
+                "password": password
+            })
 
-    try:
-        # Login with Supabase
-        response = supabase.auth.sign_in_with_password({
-            "email": email,
-            "password": password
-        })
+            if not response.user:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid credentials"
+                )
 
-        if not response.user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid credentials"
+            user_id = response.user.id
+
+            # Ensure portfolio exists
+            portfolio = await get_user_portfolio(user_id)
+            if not portfolio:
+                await create_portfolio(user_id, settings.default_starting_balance)
+
+            # Create access token
+            access_token = create_access_token(
+                data={"sub": user_id, "email": email}
             )
 
-        user_id = response.user.id
+            return Token(
+                access_token=access_token,
+                user_id=user_id,
+                email=email
+            )
 
-        # Ensure portfolio exists
-        portfolio = await get_user_portfolio(user_id)
-        if not portfolio:
-            await create_portfolio(user_id, settings.default_starting_balance)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Login failed: {str(e)}"
+            )
 
-        # Create access token
-        access_token = create_access_token(
-            data={"sub": user_id, "email": email}
-        )
+    # Fallback to local database auth
+    else:
+        try:
+            # Get user from database
+            user = await get_user_by_email(email)
+            if not user or not user.password_hash:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid credentials"
+                )
 
-        return Token(
-            access_token=access_token,
-            user_id=user_id,
-            email=email
-        )
+            # Verify password
+            if not verify_password(password, user.password_hash):
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Invalid credentials"
+                )
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Login failed: {str(e)}"
-        )
+            user_id = user.id
+
+            # Ensure portfolio exists
+            portfolio = await get_user_portfolio(user_id)
+            if not portfolio:
+                await create_portfolio(user_id, settings.default_starting_balance)
+
+            # Create access token
+            access_token = create_access_token(
+                data={"sub": user_id, "email": email}
+            )
+
+            return Token(
+                access_token=access_token,
+                user_id=user_id,
+                email=email
+            )
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Login failed: {str(e)}"
+            )
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:

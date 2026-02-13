@@ -44,8 +44,9 @@ class User(Base):
     """User account."""
     __tablename__ = "users"
 
-    id = Column(String, primary_key=True)  # Supabase user ID
+    id = Column(String, primary_key=True)  # Supabase user ID or generated UUID
     email = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=True)  # For local auth (optional)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -208,14 +209,23 @@ async def get_session() -> AsyncSession:
         yield session
 
 
-async def create_user(user_id: str, email: str) -> User:
+async def create_user(user_id: str, email: str, password_hash: Optional[str] = None) -> User:
     """Create new user."""
     async with async_session_factory() as session:
-        user = User(id=user_id, email=email)
+        user = User(id=user_id, email=email, password_hash=password_hash)
         session.add(user)
         await session.commit()
         await session.refresh(user)
         return user
+
+
+async def get_user_by_email(email: str) -> Optional[User]:
+    """Get user by email."""
+    async with async_session_factory() as session:
+        result = await session.execute(
+            select(User).where(User.email == email)
+        )
+        return result.scalar_one_or_none()
 
 
 async def create_portfolio(user_id: str, starting_balance: float) -> Portfolio:
