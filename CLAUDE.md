@@ -32,6 +32,46 @@ This project follows the **Special Projects Design Philosophy** (see `special-pr
 
 ## CHANGELOG
 
+### 2026-02-13 - Bot Functionality Enabled (Paper Trading)
+
+**Problem:** Frontend getting 404 errors when trying to start bot
+**Root Cause:** Backend API endpoints were disabled, and backend not deployed to Railway
+
+**Solution - Next.js API Routes (Quick Fix):**
+- ✅ Created Next.js API routes for bot functionality:
+  - `/api/bot/start` - Start trading bot with configuration
+  - `/api/bot/stop` - Stop running bot
+  - `/api/bot/status` - Get bot status
+  - `/api/markets` - Get market list (mock data)
+- ✅ Updated API client to use relative URLs in production
+- ✅ Mock implementation simulates bot trading for demo purposes
+- ✅ Supports all 7 strategies in UI
+
+**Backend Preparation (For Future Real Trading):**
+- ✅ Uncommented bot endpoints in FastAPI backend
+- ✅ Enabled bot_manager import
+- ✅ Enabled markets endpoint
+- ✅ Backend ready for deployment as separate Railway service
+
+**How It Works:**
+- **Development**: Frontend hits `http://localhost:8000` (FastAPI backend)
+- **Production**: Frontend uses Next.js API routes (mock implementation)
+- **Future**: Set `NEXT_PUBLIC_API_URL` to deployed backend URL for real trading
+
+**Files Modified:**
+- `polymarket-sim/web/frontend/src/pages/api/bot/start.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/bot/stop.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/bot/status.ts` (NEW)
+- `polymarket-sim/web/frontend/src/pages/api/markets.ts` (NEW)
+- `polymarket-sim/web/frontend/src/utils/api.ts`
+- `polymarket-sim/web/backend/main.py`
+
+**Next Steps for Real Trading:**
+1. Deploy FastAPI backend as separate Railway service
+2. Set environment variable `NEXT_PUBLIC_API_URL` on frontend Railway service
+3. Configure Supabase database connection
+4. Enable real Polymarket API integration
+
 ### 2026-02-13 - SP Design Philosophy Compliance
 
 **Design Fixes:**

@@ -4,7 +4,12 @@
 
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Use relative URLs in production (Next.js API routes), localhost in development
+const API_URL = process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+    ? '' // Use relative URLs in production
+    : 'http://localhost:8000' // Use localhost in development
+  );
 
 // Create axios instance
 const api = axios.create({
