@@ -16,6 +16,10 @@ from src.engine.portfolio import PortfolioTracker
 from src.strategy.threshold import NaiveThreshold
 from src.strategy.mean_reversion import MeanReversion
 from src.strategy.manual import Manual
+from src.strategy.sum_to_one_arb import SumToOneArbitrage
+from src.strategy.momentum_lag_arb import MomentumLagArbitrage
+from src.strategy.market_making import MarketMaking
+from src.strategy.llm_directional import LLMDirectional
 from .database import async_session_factory
 
 
@@ -81,12 +85,18 @@ class BotInstance:
         strategy_type = self.config.get("strategy", "threshold")
         strategy_params = self.config.get("strategy_params", {})
 
-        if strategy_type == "threshold":
-            self.strategy = NaiveThreshold(strategy_params)
-        elif strategy_type == "mean_reversion":
-            self.strategy = MeanReversion(strategy_params)
-        else:
-            self.strategy = Manual(strategy_params)
+        strategy_map = {
+            "threshold": NaiveThreshold,
+            "mean_reversion": MeanReversion,
+            "manual": Manual,
+            "sum_to_one_arb": SumToOneArbitrage,
+            "momentum_lag_arb": MomentumLagArbitrage,
+            "market_making": MarketMaking,
+            "llm_directional": LLMDirectional,
+        }
+
+        strategy_class = strategy_map.get(strategy_type, NaiveThreshold)
+        self.strategy = strategy_class(strategy_params)
 
     async def start(self):
         """Start the bot."""
