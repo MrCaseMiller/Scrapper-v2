@@ -81,3 +81,37 @@ export const portfolioAPI = {
     return response.data;
   },
 };
+
+// Bot API
+export const botAPI = {
+  start: async (config: {
+    strategy: string;
+    max_markets?: number;
+    update_interval?: number;
+    slippage_factor?: number;
+    fee_rate?: number;
+    order_ttl_hours?: number;
+    strategy_params?: any;
+  }) => {
+    const response = await api.post('/api/bot/start', config);
+    return response.data;
+  },
+
+  stop: async () => {
+    const response = await api.post('/api/bot/stop');
+    return response.data;
+  },
+
+  getStatus: async () => {
+    const response = await api.get('/api/bot/status');
+    return response.data;
+  },
+};
+
+// Markets API
+export const marketsAPI = {
+  getMarkets: async (limit = 20) => {
+    const response = await api.get(`/api/markets?limit=${limit}`);
+    return response.data;
+  },
+};

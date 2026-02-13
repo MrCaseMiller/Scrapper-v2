@@ -15,7 +15,13 @@ from .database import (
     init_db, get_user_portfolio, get_user_positions,
     get_recent_fills, get_resting_orders
 )
+from .bot_manager import bot_manager
 from pydantic import BaseModel
+import sys
+from pathlib import Path
+
+# Add parent directory to import simulation modules
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 settings = get_settings()
 
@@ -118,6 +124,13 @@ manager = ConnectionManager()
 async def startup_event():
     """Initialize database on startup."""
     await init_db()
+
+
+# Shutdown event
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown."""
+    await bot_manager.stop_all()
 
 
 # Root endpoint
@@ -298,6 +311,104 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
 
     except WebSocketDisconnect:
         manager.disconnect(user_id)
+
+
+# Bot control models
+class BotConfig(BaseModel):
+    strategy: str  # "threshold", "mean_reversion", "manual"
+    max_markets: int = 5
+    update_interval: int = 5  # seconds
+    slippage_factor: float = 0.001
+    fee_rate: float = 0.02
+    order_ttl_hours: int = 24
+    strategy_params: dict = {}
+
+
+class BotStatusResponse(BaseModel):
+    user_id: str
+    running: bool
+    strategy: Optional[str]
+    active_markets: int
+    signal_count: int
+    error_count: int
+    last_update: Optional[str]
+    config: dict
+
+
+class MarketResponse(BaseModel):
+    market_id: str
+    question: str
+    end_date: str
+    yes_token_id: str
+    no_token_id: str
+    active: bool
+    category: Optional[str]
+
+
+# Bot control endpoints
+@app.post("/api/bot/start", response_model=BotStatusResponse)
+async def start_bot(
+    config: BotConfig,
+    current_user: TokenData = Depends(get_current_user)
+):
+    """Start trading bot for current user."""
+    status = await bot_manager.start_bot(
+        current_user.user_id,
+        config.dict()
+    )
+    return BotStatusResponse(**status)
+
+
+@app.post("/api/bot/stop")
+async def stop_bot(current_user: TokenData = Depends(get_current_user)):
+    """Stop trading bot for current user."""
+    return await bot_manager.stop_bot(current_user.user_id)
+
+
+@app.get("/api/bot/status", response_model=Optional[BotStatusResponse])
+async def get_bot_status(current_user: TokenData = Depends(get_current_user)):
+    """Get trading bot status for current user."""
+    status = bot_manager.get_bot_status(current_user.user_id)
+    if not status:
+        return None
+    return BotStatusResponse(**status)
+
+
+# Markets endpoint
+@app.get("/api/markets", response_model=List[MarketResponse])
+async def get_markets(
+    limit: int = 20,
+    current_user: TokenData = Depends(get_current_user)
+):
+    """Get active Polymarket markets."""
+    from src.data.gamma import GammaClient
+
+    gamma = GammaClient(
+        base_url="https://gamma-api.polymarket.com",
+        timeout=10,
+        max_retries=3,
+        retry_backoff=2.0,
+        cache_ttl=60,
+        db=None
+    )
+
+    try:
+        markets = await gamma.get_markets(limit=limit, active=True, closed=False)
+
+        return [
+            MarketResponse(
+                market_id=m.market_id,
+                question=m.question,
+                end_date=m.end_date.isoformat(),
+                yes_token_id=m.yes_token_id,
+                no_token_id=m.no_token_id,
+                active=m.active,
+                category=getattr(m, 'category', None)
+            )
+            for m in markets
+        ]
+    finally:
+        await gamma.close()
 
 
 if __name__ == "__main__":
