@@ -2,7 +2,7 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm run build"
+    "buildCommand": "echo '=== DEBUG: Checking TradingControls.tsx ===' && grep -c 'sum_to_one_arb' src/components/TradingControls.tsx && echo '=== Found sum_to_one_arb strategy ===' && npm run build"
   },
   "deploy": {
     "startCommand": "npm start",
