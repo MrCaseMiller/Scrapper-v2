@@ -32,6 +32,26 @@ This project follows the **Special Projects Design Philosophy** (see `special-pr
 
 ## CHANGELOG
 
+### 2026-02-13 - Backend Crash Fix
+
+**Problem:** Backend crashing on startup with `ModuleNotFoundError: No module named 'src'`
+**Root Cause:** bot_manager.py imports simulation code from `src/` directory, but Docker container only has `web/` directory
+
+**Solution:**
+- ✅ Disabled bot_manager import in backend
+- ✅ Commented out bot control endpoints (start, stop)
+- ✅ Commented out markets endpoint (requires GammaClient from src/)
+- ✅ Bot status returns `null`
+- ✅ Markets returns empty array `[]`
+
+**Architecture Decision:**
+- **Frontend** (`awake-mindfulness-staging`) handles all bot logic via Next.js API routes
+- **Backend** (`scrapper-v2-production`) provides only auth + database endpoints
+- Bot functionality completely separated from backend for demo deployment
+
+**Files Modified:**
+- `polymarket-sim/web/backend/main.py`
+
 ### 2026-02-13 - Bot Functionality Enabled (Paper Trading)
 
 **Problem:** Frontend getting 404 errors when trying to start bot
@@ -52,11 +72,12 @@ This project follows the **Special Projects Design Philosophy** (see `special-pr
 - ✅ Supports all 7 strategies in UI
 - ✅ Complete mock API layer - no backend needed for demo
 
-**Backend Preparation (For Future Real Trading):**
-- ✅ Uncommented bot endpoints in FastAPI backend
-- ✅ Enabled bot_manager import
-- ✅ Enabled markets endpoint
-- ✅ Backend ready for deployment as separate Railway service
+**Backend Status:**
+- ⚠️ Bot endpoints DISABLED (requires src/ module not in Docker)
+- ⚠️ Markets endpoint DISABLED (requires src/ module)
+- ✅ Auth endpoints working
+- ✅ Database endpoints working (portfolio, positions, fills, orders)
+- ⚠️ Backend deployment optional - not needed for demo
 
 **How It Works:**
 - **Development**: Frontend hits `http://localhost:8000` (FastAPI backend)
