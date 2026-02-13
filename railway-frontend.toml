@@ -1,0 +1,8 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd polymarket-sim/web/frontend && npm install && npm run build"
+
+[deploy]
+startCommand = "cd polymarket-sim/web/frontend && npm start"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
